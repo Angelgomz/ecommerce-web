@@ -1,16 +1,31 @@
+import React, { useContext } from "react";
+import { ShoppingCartContext } from "../../Context";
 import { NavLink } from "react-router-dom";
-import { FaHouse, FaLocationPin} from "react-icons/fa6";
-import { FaMobileAlt } from "react-icons/fa";
-import { GrContact } from "react-icons/gr";
+import {
+    InboxIcon,
+    DevicePhoneMobileIcon,
+    HomeIcon,
+    ShoppingBagIcon,
+} from "@heroicons/react/24/solid";
+import { MapPinIcon } from "@heroicons/react/24/outline";
 import "./index.css";
 const Navbar = () => {
+    const context = useContext(ShoppingCartContext);
     let activeStyle = "underline underline-offset-4";
     return (
         <nav className="flex justify-between items-center fixed z-10 top-0 w-full py-5 px-8 text-sm font-light">
             <ul className>
-                    <li><FaMobileAlt /> (+569)208-44695 </li>
-                    <li><GrContact/>info@nutrilicious.cl</li>
-                    <li><FaLocationPin/>Chile - Santiago.</li>
+                <li>
+                    <DevicePhoneMobileIcon className="w-4" /> (+569)208-44695{" "}
+                </li>
+                <li>
+                    <InboxIcon className="w-4" />
+                    info@nutrilicious.cl
+                </li>
+                <li>
+                    <MapPinIcon className="w-4" />
+                    Chile - Santiago.
+                </li>
             </ul>
             <ul className="flex items-center gap-3">
                 <li className="font-semibold">
@@ -31,7 +46,7 @@ const Navbar = () => {
                             isActive ? activeStyle : ""
                         }
                     >
-                        <FaHouse/>
+                        <HomeIcon />
                     </NavLink>
                 </li>
             </ul>
@@ -77,14 +92,18 @@ const Navbar = () => {
                         Login
                     </NavLink>
                 </li>
-                <li>
+                <li className="flex">
                     <NavLink
                         to="/cart"
                         className={({ isActive }) =>
                             isActive ? activeStyle : ""
                         }
                     >
-                        🛒
+                        <div>
+                            {" "}
+                            <ShoppingBagIcon className="w-4" />
+                        </div>
+                        <div> {context.count} </div>
                     </NavLink>
                 </li>
             </ul>
