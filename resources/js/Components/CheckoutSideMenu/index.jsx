@@ -1,10 +1,28 @@
 import React, { useContext, useState } from "react";
+import { Link } from "react-router-dom";
 import { ShoppingCartContext } from "../../Context";
 import { OrderCard } from "../../Components/OrderCard";
+import { totalPrice } from "../../utils";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import "./index.css";
 const CheckoutSideMenu = () => {
     const context = useContext(ShoppingCartContext);
+    const handleDelete = (id) => {
+        const filteredProducts = context.cartProducts.filter(
+          (product) => product.id !== id
+        );
+        context.setCartProducts(filteredProducts);
+      };
+    const handleCheckout = () => {
+        const orderToAdd = {
+            date: "01.02.23",
+            products: context.cartProducts,
+            totalProducts: context.cartProducts.length,
+            totalPrice: totalPrice(context.cartProducts),
+        };
+        context.setOrder([...context.order, orderToAdd]);
+        context.setCartProducts([]);
+    };
     return (
         <aside
             className={`${
@@ -20,12 +38,32 @@ const CheckoutSideMenu = () => {
                     />
                 </div>
             </div>
-            <div className="px-6 overflow-y-scroll">
-                {context.cartProducts.map((product) => (
+            <div className="px-6 overflow-y-scroll flex-1" key="">
+                {context.cartProducts.map((product,i) => (
                     <>
-                    <OrderCard id={product.id} title={product.title} imageUrl={product.images} price={product.price}/>
+                        <OrderCard key={i}
+                            id={product.id}
+                            title={product.title}
+                            imageUrl={product.image}
+                            price={product.price}
+                            handleDelete={handleDelete}
+                        />
                     </>
                 ))}
+            </div>
+            <div className="px-6">
+                <div className="flex justify-between items-center mb-2">
+                    <span className="font-light">Total price:</span>
+                    <span className="font-medium">
+                        ${totalPrice(context.cartProducts)}{" "}
+                    </span>
+                </div>
+                <Link to='my-order/last'>
+                <button className="w-full bg-black py-3 text-white rounded-lg mb-10" onClick={() => handleCheckout()}>
+                    {" "}
+                    Checkout
+                </button>
+                </Link>
             </div>
         </aside>
     );

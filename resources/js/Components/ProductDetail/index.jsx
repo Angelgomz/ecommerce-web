@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { ShoppingCartContext } from "../../Context";
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import './index.css'
@@ -11,7 +11,7 @@ const ProductDetail = () => {
                 <div><XMarkIcon className="w-10 cursor-pointer"  onClick={() => context.closeProductDetail}/></div> 
             </div>
             <figure className="px-6">
-                <img className="w-full h-full rounded-lg" src={context.productToShow.images} alt={context.productToShow.title}>
+                <img className="w-full h-full rounded-lg" src={context.productToShow.image} alt={context.productToShow.title}>
                 </img>
                 {context.productToShow.title}
             </figure>
