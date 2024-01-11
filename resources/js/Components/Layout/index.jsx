@@ -1,5 +1,5 @@
 const Layout = ({ children }) => {
-    return <div className="flex flex-col mt-20 items-center">
+    return <div className="mt-24 w-100">
         {children}
     </div>;
 };

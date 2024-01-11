@@ -1,0 +1,51 @@
+.header {
+    background: #97BF03;
+}
+
+.button-color-text {
+    color: #97BF03;
+}
+
+.header-text-title {
+    font-size: 40px;
+}
+
+.header-text-subtitle {
+    font-size: 30px;
+}
+
+.circle {
+    background-size: 100% 100%;
+}
+
+.flower-nutri {
+    margin-left: auto;
+}
+
+@keyframes autoplay1 {
+    0%{
+        opacity:1;
+    }
+
+    50%{
+        opacity:0;
+    }
+}
+
+#circle>*:nth-child(1) {
+    animation-delay: 0s
+}
+
+#circle>*:nth-child(2) {
+    animation-delay: 3s
+}
+
+#circle>*:nth-child(3) {
+    animation-delay: 6s
+}
+#circle>  * {
+    animation-duration: 9s;
+    animation-name:autoplay1;
+    animation-iteration-count: infinite;
+    position: absolute;
+}

@@ -3,12 +3,14 @@ import { ShoppingCartProvider } from "./Context";
 import React from 'react';
 import { createRoot } from 'react-dom/client'
 import Home  from './Pages/Home';
+import Register  from './Pages/Register';
 import Order  from './Pages/Order';
 import Orders  from './Pages/Orders';
 import Navbar  from "./Components/Navbar";
 const AppRoutes = () => {
     let routes = useRoutes([
       {path:"/",element: <Home />},
+      {path:"/register",element: <Register/>},
       {path:"/my-order",element:<Order />},
       {path:"/my-order/last",element:<Order />},
       {path:"/my-order/:id",element:<Order />},

@@ -1,4 +1,4 @@
-.header{
+.info-social-media{
     background-color: #739200;
     color:whitesmoke;
 }
@@ -6,4 +6,7 @@ nav{
     background:#97BF03;
     color:white;
     font-weight: bold;
+}
+li{
+    cursor:pointer;
 }
