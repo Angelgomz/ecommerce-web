@@ -3,19 +3,24 @@ import { InputField } from "../InputField";
 import { PasswordToggle } from "../PasswordToggle";
 import { SubmitButton } from "../SubmitButton";
 import "./index.css";
+
 const FormRegister = () => {
-    const baseUrl = '/api/register';
+    const baseUrl = "/api/register";
     const namePattern = /^[A-Za-z\s]+$/;
     const lastnamePattern = /^[A-Za-z\s]+$/;
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const addressPattern = /^.{5,}$/; // Minimum 5 characters
+    const addressPattern = /^.{5,}$/;
     const [name, setName] = useState("");
     const [lastname, setLastname] = useState("");
     const [email, setEmail] = useState("");
     const [address, setAddress] = useState("");
-    const [showPassword, setShowPassword] = useState(false);
     const [password, setPassword] = useState("");
     const [passwordRepeat, setPasswordRepeat] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+    const [errorMessages, setErrorMessages] = useState([]);
+    const displayErrors = (errors) => {
+        setErrorMessages(errors);
+    };
     const handleTogglePassword = () => {
         setShowPassword(!showPassword);
     };
@@ -25,35 +30,6 @@ const FormRegister = () => {
     };
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const validations = [
-            {
-                condition: password !== passwordRepeat,
-                message: "Passwords do not match.",
-            },
-            {
-                condition: !namePattern.test(name),
-                message: "Please enter a valid name.",
-            },
-            {
-                condition: !lastnamePattern.test(lastname),
-                message: "Please enter a valid last name.",
-            },
-            {
-                condition: !emailPattern.test(email),
-                message: "Please enter a valid email address.",
-            },
-            {
-                condition: !addressPattern.test(address),
-                message: "Please enter a valid address (minimum 5 characters).",
-            },
-        ];
-        const validationError = validations.find(
-            (validation) => validation.condition
-        );
-        if (validationError) {
-            alert(validationError.message);
-            return;
-        }
         const formData = new FormData();
         formData.append("name", name);
         formData.append("lastname", lastname);
@@ -61,20 +37,22 @@ const FormRegister = () => {
         formData.append("address", address);
         formData.append("password", password);
         formData.append("password_confirmation", passwordRepeat);
-        try{
-        const response = await fetch(baseUrl,{
-            method: "POST",
-            body:formData,
-          });
-          if (!response.ok) {
-            const errorMessage = await response.text();
-            throw new Error(`Server error: ${errorMessage}`);
-          }
-          const responseData = await response.json();
-          console.log("Server response:", responseData);
+        try {
+            const response = await fetch(baseUrl, {
+                method: "POST",
+                responseType: "JSON",
+                body: formData,
+            });
+            if (!response.ok) {
+                const errorData = await response.json(); // Assuming Laravel sends JSON response for errors
+                displayErrors(errorData.errors);
+                return;
+            }
+            const responseData = await response.json();
         } catch (error) {
-          console.error("Fetch error:", error.message);
-          alert("An error occurred while submitting the form. Please try again.");
+            alert(
+                "An error occurred while submitting the form. Please try again."
+            );
         }
     };
 
@@ -90,6 +68,17 @@ const FormRegister = () => {
                     placeholder="Jane"
                     pattern={namePattern.source}
                 />
+                {errorMessages["name"]
+                    ? errorMessages["name"].map(function (data, index) {
+                          return (
+                              <div key={index}>
+                                  <p className="text-red-500 text-md italic">
+                                      <strong>* {data}</strong>
+                                  </p>
+                              </div>
+                          );
+                      })
+                    : ""}
                 <InputField
                     label="Apellido"
                     type="text"
@@ -99,6 +88,17 @@ const FormRegister = () => {
                     placeholder="Doe"
                     pattern={lastnamePattern.source}
                 />
+                {errorMessages["lastname"]
+                    ? errorMessages["lastname"].map(function (data, index) {
+                          return (
+                              <div key={index}>
+                                  <p className="text-red-500 text-md italic">
+                                      <strong>* {data}</strong>
+                                  </p>
+                              </div>
+                          );
+                      })
+                    : ""}
                 <InputField
                     label="Email"
                     type="email"
@@ -108,6 +108,17 @@ const FormRegister = () => {
                     placeholder="johndoe@gmail.com"
                     pattern={emailPattern.source}
                 />
+                {errorMessages["email"]
+                    ? errorMessages["email"].map(function (data, index) {
+                          return (
+                              <div key={index}>
+                                  <p className="text-red-500 text-md italic">
+                                      <strong>* {data}</strong>
+                                  </p>
+                              </div>
+                          );
+                      })
+                    : ""}
                 <InputField
                     label="Dirección"
                     type="address"
@@ -117,6 +128,17 @@ const FormRegister = () => {
                     placeholder="123 Main Street, Providencia, Santiago"
                     pattern={addressPattern.source}
                 />
+                {errorMessages["address"]
+                    ? errorMessages["address"].map(function (data, index) {
+                          return (
+                              <div key={index}>
+                                  <p className="text-red-500 text-md italic">
+                                      <strong>* {data}</strong>
+                                  </p>
+                              </div>
+                          );
+                      })
+                    : ""}
                 <PasswordToggle
                     showPassword={showPassword}
                     handleTogglePassword={handleTogglePassword}
@@ -125,6 +147,17 @@ const FormRegister = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     label={"Contraseña"}
                 />
+                {errorMessages["password"]
+                    ? errorMessages["password"].map(function (data, index) {
+                          return (
+                              <div key={index}>
+                                  <p className="text-red-500 text-md italic">
+                                      <strong>* {data}</strong>
+                                  </p>
+                              </div>
+                          );
+                      })
+                    : ""}
                 <PasswordToggle
                     showPassword={showPasswordRepeat}
                     handleTogglePassword={handleTogglePasswordRepeat}
@@ -138,5 +171,4 @@ const FormRegister = () => {
         </div>
     );
 };
-
 export { FormRegister };

@@ -74,7 +74,7 @@ class RegisterController extends Controller
                 'success' => false,
                 'message' => 'Validation failed',
                 'errors' => $validator->errors(),
-            ], 422); // 422 Unprocessable Entity status code is commonly used for validation errors
+            ],422); 
         }
         return User::create([
             'name' => $request->input('name'),
