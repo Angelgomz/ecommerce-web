@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\User\UserController;
+use App\Http\Controllers\Auth\AuthenticatedUserController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,19 +16,18 @@ use App\Http\Controllers\Auth\RegisterController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-Route::controller(LoginController::class)->middleware('auth:sanctum')->prefix('auth')->name('auth.')->group(function () {
-    Route::get('/user', 'user')->name('user');
-    Route::get('/login', 'login')->name('login');
-    Route::post('/login', 'callback')->name('login');
+Route::controller(LoginController::class)->prefix('auth')->name('auth.')->group(function () {
+    Route::post('/login', 'login')->name('login');
     Route::post('/logout', 'logout')->name('logout');
+});   
+Route::controller(RegisterController::class)->middleware('guest:sanctum')->prefix('register')->group(function () {
+    Route::post('/', 'create')->name('register');
 });
-// Authentication routes
-/*Route::group(['controller' => LoginController::class], function () {
-    Route::post('login', 'login')->name('login')->middleware('guest:sanctum');
-    Route::post('logout', 'logout')->name('logout')->middleware('auth:sanctum');
-}); */ 
-Route::controller(RegisterController::class)->prefix('register')->group(function () {
-    Route::post('/', 'create')->name('register')->middleware('guest:sanctum');
+Route::group(['controller' => AuthenticatedUserController::class,'prefix'=>'authentication'], function () {
+
+    Route::get('/', 'show');
+   /*  Route::put('/auth/update/info', 'updateInfo')->name('auth.update.info');
+    Route::put('/auth/update/password', 'updatePassword')->name('auth.update.password'); */ 
 });
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

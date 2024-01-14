@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 class LoginController extends Controller
 {
     /*
@@ -36,5 +38,28 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+     /**
+     * Authenticate the user.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function login(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email:filter',
+            'password' => 'required',
+        ]);
+        $user = User::where('email', $request->email)->first();
+        if (!$user || !Hash::check($request->password, $user->password ?? '')) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => 'Invalid credentials'
+                ], 401);
+        }
+        $token = $user->createToken($request->email);
+        return response()->json(['plain_text_token' => $token->plainTextToken,'user'=>$user],200);
+       
     }
 }
