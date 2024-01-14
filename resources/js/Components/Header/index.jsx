@@ -20,7 +20,7 @@ const Header = () => {
                         alimentación saludable
                         <br></br>a la puerta de tu casa.
                     </p>
-                    <button className="bg-white font-semibold py-5 px-6 rounded mt-3 button-color-text">
+                    <button className="bg-white font-semibold py-5 px-6 rounded mt-3 text-green">
                         Ver menú
                     </button>
                 </div>

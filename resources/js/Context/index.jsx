@@ -2,7 +2,7 @@ import { createContext, useState, useEffect } from "react";
 export const ShoppingCartContext = createContext();
 export const ShoppingCartProvider = ({ children }) => {
     // my acount 
-    const [account,setAccount] = useState([]);
+    const [account,setAccount] = useState(localStorage.getItem('account') ? localStorage.getItem('account') : [])
     //sing in - sign out 
     const [signOut,setSignOut] = useState(); 
     // items for sale.

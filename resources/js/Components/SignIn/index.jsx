@@ -1,10 +1,11 @@
-
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { InputField } from "../InputField";
 import { PasswordToggle } from "../PasswordToggle";
 import { SubmitButton } from "../SubmitButton";
 import "./index.css";
 const SignIn = ({ context }) => {
+    const navigate = useNavigate();
     const [showAlert, setShowAlert] = useState(false);
     const [colorAlert, setColorAlert] = useState("");
     const [textAlert, setTextAlert] = useState("");
@@ -89,7 +90,7 @@ const SignIn = ({ context }) => {
                 context.setSignOut(false);
                 localStorage.setItem("sign-out", JSON.stringify(false));
                 localStorage.setItem("account", JSON.stringify(data.user));
-                window.location.href = 'http://127.0.0.1:8000/'
+                navigate("/");
                 return;
             }
         } catch (error) {
@@ -111,7 +112,7 @@ const SignIn = ({ context }) => {
         />
     );
 
-    const renderErrorMessages = (field) => (
+    const renderErrorMessages = (field) =>
         errorMessages[field] &&
         errorMessages[field].map((data, index) => (
             <div key={index}>
@@ -119,8 +120,7 @@ const SignIn = ({ context }) => {
                     <strong>* {data}</strong>
                 </p>
             </div>
-        ))
-    );
+        ));
 
     const renderView = () => {
         return (
@@ -141,7 +141,7 @@ const SignIn = ({ context }) => {
                                 "lastname",
                                 createUserState.lastname,
                                 lastnamePattern,
-                                "Barroso",
+                                "Barroso"
                             )}
                             {renderErrorMessages("lastname")}
                             {renderInputField(
@@ -149,7 +149,7 @@ const SignIn = ({ context }) => {
                                 "email",
                                 createUserState.email,
                                 emailPattern,
-                                "paolabarroso@gmail.com",
+                                "paolabarroso@gmail.com"
                             )}
                             {renderErrorMessages("email")}
                             {renderInputField(
@@ -239,8 +239,6 @@ const SignIn = ({ context }) => {
                 )}
             </div>
         );
-
-
     };
 
     return (

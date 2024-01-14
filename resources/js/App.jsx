@@ -1,36 +1,64 @@
-import { useRoutes, BrowserRouter } from "react-router-dom";
-import { ShoppingCartProvider } from "./Context";
-import React from 'react';
-import { createRoot } from 'react-dom/client'
-import Home  from './Pages/Home';
-import Order  from './Pages/Order';
-import Orders  from './Pages/Orders';
-import Navbar  from "./Components/Navbar";
+import React, { useContext } from "react";
+import { useRoutes, BrowserRouter, Navigate } from "react-router-dom";
+import { ShoppingCartProvider, ShoppingCartContext } from "./Context";
+import { createRoot } from "react-dom/client";
+import Home from "./Pages/Home";
+import Order from "./Pages/Order";
+import Orders from "./Pages/Orders";
+import Navbar from "./Components/Navbar";
 import SignIn from "./Pages/SignIn";
 const AppRoutes = () => {
+    const context = useContext(ShoppingCartContext);
+    const isUserSignedIn =
+        context.account && Object.keys(context.account).length > 0;
+    const isUserSignOut =
+        context.signOut || JSON.parse(localStorage.getItem("sign-out"));
     let routes = useRoutes([
-      {path:"/",element: <Home />},
-      {path:"/sign-in",element:<SignIn/>},
-      {path:"/my-order",element:<Order />},
-      {path:"/my-order/last",element:<Order />},
-      {path:"/my-order/:id",element:<Order />},
-      {path:"/my-orders",element:<Orders />},
+        { path: "/", element: <Home /> },
+        { path: "/sign-in", element: <SignIn /> },
+        { path: "/my-order", element: <Order /> },
+        {
+            path: "/my-order/last",
+            element:
+                isUserSignedIn && !isUserSignOut ? (
+                    <Order />
+                ) : (
+                    <Navigate replace to={"/sign-in"} />
+                ),
+        },
+        {
+            path: "/my-order/:id",
+            element:
+                isUserSignedIn && !isUserSignOut ? (
+                    <Order />
+                ) : (
+                    <Navigate replace to={"/sign-in"} />
+                ),
+        },
+        {
+            path: "/my-orders",
+            element:
+                isUserSignedIn && !isUserSignOut ? (
+                    <Orders />
+                ) : (
+                    <Navigate replace to={"/sign-in"} />
+                ),
+        },
     ]);
     return routes;
-  };
-  
+};
 
 const App = () => {
-    return(
-      <ShoppingCartProvider>
-        <BrowserRouter>
-        <Navbar/>
-          <AppRoutes />
-        </BrowserRouter> 
+    return (
+        <ShoppingCartProvider>
+            <BrowserRouter>
+                <Navbar />
+                <AppRoutes />
+            </BrowserRouter>
         </ShoppingCartProvider>
     );
-}
+};
 
-if(document.getElementById('root')){
-    createRoot(document.getElementById('root')).render(<App/>)
+if (document.getElementById("root")) {
+    createRoot(document.getElementById("root")).render(<App />);
 }

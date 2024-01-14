@@ -1,13 +1,11 @@
-import { useContext } from "react";
-import { ShoppingCartContext } from "../../Context";
 import { Layout } from "../../Components/Layout";
 import { Header } from "../../Components/Header";
+import { Info } from "../../Components/Info";
 const Home = () => {
-    const context = useContext(ShoppingCartContext);
-           
     return (
         <Layout>
-            <Header/>
+            <Header />
+            <Info />
         </Layout>
     );
 };

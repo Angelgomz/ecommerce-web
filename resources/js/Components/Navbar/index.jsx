@@ -23,7 +23,6 @@ const Navbar = () => {
         context.setSignOut(!context.setSignOut);
         context.setAccount([]);
     };
-    console.log(context);
     const renderView = () => {
         if (isUserSignedIn && !isUserSignOut) {
             return (
