@@ -223,7 +223,7 @@ const SignIn = ({ context }) => {
                                 }
                                 label={"Contraseña"}
                             />
-                            <div className="relative left-[42%]">
+                            <div className="flex justify-center items-center">
                                 <SubmitButton />
                             </div>
                         </div>

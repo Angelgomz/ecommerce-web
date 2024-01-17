@@ -1,9 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@5000&display=swap');
+
 body {
 	font-family: 'Montserrat', sans-serif;
+}
+
+.bg-nutri {
+	background: #97BF03;
+}
+.info-social-media{
+    background-color:#596f06;;
+}
+.btn-nutri{
+	background-color:#596f06;
 }
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-

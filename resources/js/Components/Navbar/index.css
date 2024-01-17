@@ -1,12 +1,33 @@
-.info-social-media{
-    background-color: #739200;
-    color:whitesmoke;
+.info-social-media {
+    background-color: #596f06;
+    ;
 }
-nav{
-    background:#97BF03;
-    color:white;
+
+.ul-mobile {
+    justify-content:flex-start;
+    align-items: center;
+    color: #97BF03;
+    background-color: white;
+    padding: 3%;
     font-weight: bold;
+    margin-top:1%;
+    height:auto;
+    overflow: hidden;
 }
-li{
-    cursor:pointer;
+.navbar-close{
+    display:none;
+}
+@media screen and (min-width: 768px) {
+    .navbar-close{
+        display:flex;
+    }
+    .ul-mobile {
+        justify-content: none;
+        align-items: none;
+        color: white;
+        background-color: #97BF03;
+        padding: 0%;
+        margin-top:0%;
+    }
+
 }
