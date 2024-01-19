@@ -1,10 +1,9 @@
 import React from "react";
-import Logo from "./../../../images/logo_nutri.png";
 import Food from "./../../../images/food1.png";
 import Food1 from "./../../../images/food2.png";
 import Food2 from "./../../../images/food3.png";
 
-const Store = () => {
+const Products = () => {
   const foodImages = [Food, Food1, Food2];
 
   return (
@@ -28,4 +27,4 @@ const Store = () => {
   );
 };
 
-export { Store };
+export { Products };

@@ -8,7 +8,6 @@ import "./index.css";
 
 const Header = () => {
   const foodImages = [FoodImage1, FoodImage2, FoodImage3];
-
   return (
     <div className="p-5 text-white header bg-nutri flex flex-col justify-center items-center md:flex-row md:mt-10 md:p-10">
       <div className="md:order-2">

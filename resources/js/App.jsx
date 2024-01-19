@@ -3,6 +3,7 @@ import { useRoutes, BrowserRouter, Navigate } from "react-router-dom";
 import { ShoppingCartProvider, ShoppingCartContext } from "./Context";
 import { createRoot } from "react-dom/client";
 import Home from "./Pages/Home";
+import Store from "./Pages/Store";
 import Order from "./Pages/Order";
 import Orders from "./Pages/Orders";
 import Navbar from "./Components/Navbar";
@@ -15,6 +16,7 @@ const AppRoutes = () => {
         context.signOut || JSON.parse(localStorage.getItem("sign-out"));
     let routes = useRoutes([
         { path: "/", element: <Home /> },
+        { path: "/store", element: <Store /> },
         { path: "/sign-in", element: <SignIn /> },
         { path: "/my-order", element: <Order /> },
         {
