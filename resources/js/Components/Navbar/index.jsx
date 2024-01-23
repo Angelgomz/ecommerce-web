@@ -37,7 +37,7 @@ const Navbar = () => {
                     to="/my-orders"
                     className={({ isActive }) => (isActive ? activeStyle : "")}
                 >
-                    My Orders
+                    Mi orden
                 </NavLink>
                 <NavLink
                     to="/account"
@@ -73,23 +73,26 @@ const Navbar = () => {
     return (
         <Fragment>
             <div className="flex justify-between items-center fixed z-10 top-0 w-full py-3 text-sm font-light info-social-media text-white md:h-15em md:py-1 md:px-1">
-                <div className="flex gap-2 md:m-2 md:gap-4">
+                <div className="flex gap-1 md:m-2 md:gap-4">
                     <span className="flex md:gap-1">
-                        <DevicePhoneMobileIcon className="w-4 md:w-4" />
-                        (+569)208-44695
+                        <DevicePhoneMobileIcon className="w-4" />
+                        <p className="text-sm md:text-md">+569208-44695</p>
                     </span>
                     <span className="flex md:gap-1">
-                        <InboxIcon className="w-4 md:w-4" />
-                        info@nutrilicious.cl
+                        <InboxIcon className="w-4" />
+                        <p className="text-sm md:text-md">
+                            {" "}
+                            info@nutrilicious.cl{" "}
+                        </p>
                     </span>
                     <span className="flex md:gap-1">
-                        <MapPinIcon className="w-4 md:w-4" />
-                        Chile - Santiago
+                        <MapPinIcon className="w-4" />
+                        <p className="text-sm md:text-md">Chile - Santiago</p>
                     </span>
                 </div>
-                <div className="flex cursor-pointer">
-                    <FaFacebookF className="w-4 h-4 md:w-6 md:h-6" />
-                    <FaInstagram className="w-4 h-4 md:w-6 md:h-6" />
+                <div className="cursor-pointer flex">
+                    <FaFacebookF className="w-0 h-0 md:w-6 md:h-6" />
+                    <FaInstagram className="w-0 h-0 sm:w-6 md:h-6" />
                 </div>
             </div>
             <nav className="fixed z-10 top-10 w-full text-green text-sm font-light cursor-pointer flex flex-col bg-nutri px-0 py-3 md:flex-row md:justify-between md:px-2 md:text-white">

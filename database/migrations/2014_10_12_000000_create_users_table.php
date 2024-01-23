@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('address')->nullable();
             $table->integer('comunne_id')->nullable();
+            $table->softDeletes(); // Adds soft delete column
             $table->rememberToken();
             $table->timestamps();
         });

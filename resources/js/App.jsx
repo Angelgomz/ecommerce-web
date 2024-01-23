@@ -29,6 +29,10 @@ const AppRoutes = () => {
                 ),
         },
         {
+            path: "/my-order/checkout",
+            element:<Order />
+        },
+        {
             path: "/my-order/:id",
             element:
                 isUserSignedIn && !isUserSignOut ? (

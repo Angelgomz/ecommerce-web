@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ShoppingCartContext } from "../../Context";
 import { OrderCard } from "../../Components/OrderCard";
@@ -7,6 +7,7 @@ import { XMarkIcon } from "@heroicons/react/24/solid";
 import "./index.css";
 const CheckoutSideMenu = () => {
     const context = useContext(ShoppingCartContext);
+  
     const handleDelete = (id) => {
         const filteredProducts = context.cartProducts.filter(
           (product) => product.id !== id
@@ -15,13 +16,15 @@ const CheckoutSideMenu = () => {
       };
     const handleCheckout = () => {
         const orderToAdd = {
-            date: "01.02.23",
+            date: `${currentDate.getDate()}.${currentDate.getMonth() + 1}.${currentDate.getFullYear()}`,
             products: context.cartProducts,
             totalProducts: context.cartProducts.length,
             totalPrice: totalPrice(context.cartProducts),
-        };
-        context.setOrder([...context.order, orderToAdd]);
-        context.setCartProducts([]);
+          };
+        context.setOrder([...context.order,orderToAdd]);
+        context.setCheckout(ordertToAdd);
+        localStorage.setItem('checkout',JSON.stringify(orderToAdd));
+        console.log(context.checkout,localStorage.getItem('checkout'));
     };
     return (
         <aside
@@ -30,7 +33,7 @@ const CheckoutSideMenu = () => {
             } my-order flex-col fixed bg-white right-0 border boder border-black rounded-lg`}
         >
             <div className="flex justify-between items-center p-6">
-                <h2 className="font-medium text-xl">My Order</h2>
+                <h2 className="font-medium text-xl">Mi Orden</h2>
                 <div>
                     <XMarkIcon
                         className="w-10 cursor-pointer"
@@ -53,15 +56,14 @@ const CheckoutSideMenu = () => {
             </div>
             <div className="px-6">
                 <div className="flex justify-between items-center mb-2">
-                    <span className="font-light">Total price:</span>
-                    <span className="font-medium">
-                        ${totalPrice(context.cartProducts)}{" "}
+                    <span className="font-light">Precio:</span>
+                    <span className="font-medium text-nutri">
+                        ${totalPrice(context.cartProducts)}
                     </span>
                 </div>
-                <Link to='my-order/last'>
-                <button className="w-full bg-black py-3 text-white rounded-lg mb-10" onClick={() => handleCheckout()}>
-                    {" "}
-                    Checkout
+                <Link to='/my-order/checkout'>
+                <button className="w-full bg-nutri py-3 text-white rounded-lg mb-10" onClick={() => handleCheckout()}>
+                    Continuar
                 </button>
                 </Link>
             </div>

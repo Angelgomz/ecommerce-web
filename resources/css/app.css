@@ -6,7 +6,10 @@ body {
 }
 
 .bg-nutri {
-	background: #97BF03;
+	background-color: #97BF03 !important;
+}
+.text-nutri{
+	color:#97BF03;
 }
 .info-social-media{
     background-color:#596f06;;

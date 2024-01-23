@@ -1,26 +1,49 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { ShoppingCartContext } from "../../Context";
-import { XMarkIcon } from '@heroicons/react/24/solid';
-import './index.css'
+import { XMarkIcon} from "@heroicons/react/24/solid";
+import "./index.css";
+import { QuantityInput } from "../QuantityInput";
 const ProductDetail = () => {
     const context = useContext(ShoppingCartContext);
+    const [quantity, setQuantity] = useState(1);
     return (
-        <aside className={`${context.isProductDetailOpen ? 'flex': 'hidden'} product-detail flex-col fixed bg-white right-0 border boder border-black rounded-lg`}> 
-            <div className="flex justify-between items-center p-6" onClick={() => context.closeProductDetail}>
-                <h2 className="font-medium text-xl">Detail</h2>
-                <div><XMarkIcon className="w-10 cursor-pointer"  onClick={() => context.closeProductDetail}/></div> 
+        <aside
+            className={`${
+                context.isProductDetailOpen ? "flex" : "hidden"
+            } product-detail flex-col fixed bg-white right-0 border boder border-green rounded-lg p-2`}
+        >
+            <div
+                className="flex justify-between items-center p-1"
+            >
+                <h2 className="font-medium text-lg text-nutri">Detail</h2>
+                <div>
+                    <XMarkIcon
+                        className="w-10 cursor-pointer"
+                        onClick={() =>  context.setIsProductDetailOpen(!context.isProductDetailOpen)}
+                    />
+                </div>
             </div>
-            <figure className="px-6">
-                <img className="w-full h-full rounded-lg" src={context.productToShow.image} alt={context.productToShow.title}>
-                </img>
+            <div className="flex justify-center items-center">
+                <img
+                    className="w-4/5 h-4/5 rounded-lg"
+                    src={context.productToShow.image}
+                    alt={context.productToShow.title}
+                ></img>
+            </div>
+            <p className="flex flex-col pl-1">
                 {context.productToShow.title}
-            </figure>
-            <p className="flex flex-col p-6">
-                <span className="font-medium text-2-xl">${context.productToShow.price}</span>
-                <span className="font-medium text-md">{context.productToShow.title}</span>
-                <span className="font-light text-md">{context.productToShow.description}</span>
+                <span className="font-medium text-nutri text-md text-xl">
+                    ${context.productToShow.price}
+                </span>
+                <span className="font-light text-sm">
+                    {context.productToShow.description}
+                </span>
+                <QuantityInput product={context.productToShow.id}/>
+                <button className="text-white bg-nutri p-2 m-2 rounded-lg">
+                    agregar al carrito{" "}
+                </button>
             </p>
         </aside>
-    )
-}
-export {ProductDetail}
+    );
+};
+export { ProductDetail };
