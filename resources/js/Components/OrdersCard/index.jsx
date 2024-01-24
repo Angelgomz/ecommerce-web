@@ -7,7 +7,10 @@ const OrdersCard = (props) => {
     <div className="bg-white p-2 rounded-md shadow-md mb-2">
       <div className="flex justify-between items-center mb-2">
         <h3 className="text-lg font-semibold">Order #{totalPrice}</h3>
+        <div>
         <p className="text-gray-300">Fecha: {date}</p>
+        <p> Estado: por entregar </p>
+        </div>
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div>

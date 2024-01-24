@@ -1,10 +1,14 @@
 import { createContext, useState, useEffect } from "react";
 export const ShoppingCartContext = createContext();
 export const ShoppingCartProvider = ({ children }) => {
-    // my acount 
-    const [account,setAccount] = useState(localStorage.getItem('account') ? JSON.parse(localStorage.getItem('account')) : [])
-    //sing in - sign out 
-    const [signOut,setSignOut] = useState(); 
+    // my acount
+    const [account, setAccount] = useState(
+        localStorage.getItem("account")
+            ? JSON.parse(localStorage.getItem("account"))
+            : []
+    );
+    //sing in - sign out
+    const [signOut, setSignOut] = useState();
     // items for sale.
     const [items, setItems] = useState(null);
     const [filteredItems, setFilteredItems] = useState(null);
@@ -12,9 +16,17 @@ export const ShoppingCartProvider = ({ children }) => {
     const [cartProducts, setCartProducts] = useState([]);
     const [count, setCount] = useState(0);
     //order checkout
-    const [checkout,setCheckout] = useState(localStorage.getItem('checkout') ? JSON.parse(localStorage.getItem('checkout')) : [])
+    const [checkout, setCheckout] = useState(
+        localStorage.getItem("checkout")
+            ? JSON.parse(localStorage.getItem("checkout"))
+            : []
+    );
     // orders for user.
-    const [order, setOrder] = useState(localStorage.getItem('orders') ? JSON.parse(localStorage.getItem('orders')) : []);
+    const [order, setOrder] = useState(
+        localStorage.getItem("orders")
+            ? JSON.parse(localStorage.getItem("orders"))
+            : []
+    );
     // info detail item / product detail open/close.
     const [isProductDetailOpen, setIsProductDetailOpen] = useState(false);
     const openProductDetail = () => setIsProductDetailOpen(true);
@@ -26,10 +38,12 @@ export const ShoppingCartProvider = ({ children }) => {
     const openCheckoutSideMenu = () => setIsCheckoutSideMenuOpen(true);
     const closeCheckoutSideMenu = () => setIsCheckoutSideMenuOpen(false);
     const filteredItemsByTitle = (items, searchByTitle) => {
-        return items?.filter((item) =>
-            item.title.toLowerCase().includes(searchByTitle)
-        );
+        if (searchByTitle)
+            return items?.filter((item) =>
+                item.title.toLowerCase().includes(searchByTitle.toLowerCase())
+            );
     };
+
     useEffect(() => {
         if (searchByTitle)
             setFilteredItems(filteredItemsByTitle(items, searchByTitle));
@@ -59,9 +73,9 @@ export const ShoppingCartProvider = ({ children }) => {
                 account,
                 setAccount,
                 signOut,
-                setSignOut, 
+                setSignOut,
                 checkout,
-                setCheckout
+                setCheckout,
             }}
         >
             {children}
