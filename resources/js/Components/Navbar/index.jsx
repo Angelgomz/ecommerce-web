@@ -37,17 +37,13 @@ const Navbar = () => {
                     to="/my-orders"
                     className={({ isActive }) => (isActive ? activeStyle : "")}
                 >
-                    Mi orden
-                </NavLink>
+                    Mis compras
+                </NavLink >
                 <NavLink
-                    to="/account"
-                    className={({ isActive }) => (isActive ? activeStyle : "")}
-                >
-                    My Account
-                </NavLink>
-                <li className="text-white mr-2">
+                  to="/account"
+                  className={({ isActive }) => (isActive ? activeStyle : "")}>
                     <strong>{context.account?.email}</strong>
-                </li>
+                </NavLink>
                 <NavLink
                     to="/sign-in"
                     className={({ isActive }) =>
@@ -144,10 +140,10 @@ const Navbar = () => {
                         openNavbarMobile ? "navbar-open" : "navbar-close"
                     } md:text-white md:bg-nutri md:visible md:items-center md:flex-row`}
                 >
-                    {renderView()}
-                    <li>
+                     <li>
                         <NavLink to="/store">Tienda</NavLink>{" "}
                     </li>
+                    {renderView()}
                     <li>
                         <NavLink
                             to="/cart"

@@ -16,7 +16,6 @@ const Recipes = ({}) => {
             <div className="p-10 h-90 w-[100%] md:h[auto] md:w-[60%]">
                 <Swiper
                     preloadImages={false}
-                    lazy={true}
                     breakpoints={{
                         1024: {
                             slidesPerView: 3,

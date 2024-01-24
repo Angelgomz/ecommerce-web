@@ -1,8 +1,6 @@
-import React, { useContext } from "react";
-import { ShoppingCartContext } from "../../Context";
+import React from "react";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 const OrderCard = props => {
-    const context = useContext(ShoppingCartContext);
     const {id, title, imageUrl, price, handleDelete } = props;
     let renderXMarkIcon = "";
     if(handleDelete){

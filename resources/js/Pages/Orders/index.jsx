@@ -1,26 +1,34 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { Layout } from "../../Components/Layout";
-import { OrderCard } from "../../Components/OrderCard";
+import { OrdersCard } from "../../Components/OrdersCard";
 import { ShoppingCartContext } from "../../Context";
-import { ChevronLeftIcon } from "@heroicons/react/24/solid";
-const Orders= () => {
+const Orders = () => {
     const context = useContext(ShoppingCartContext);
     return (
         <Layout>
-            <div className="flex w-80 items-center relative justify-center mb-1 mt-1">
-            My Orders
-            </div>
-            <div className="px-6 overflow-y-scroll flex-1">
-                {context.order.map((order,index) => (
-                    <Link to={`/my-order/${index}`}>
-                        <OrderCard
-                            key={index}
-                            totalPrice={order.totalPrice}
-                            products={order.totalProducts}
-                        />
-                    </Link>
-                ))}
+            <div className="flex flex-col justify-center w-full">
+                <div className="flex items-center justify-center relative m-5">
+                    <h1 className="font-medium text-2xl uppercase dark-green flex justify-center items-center">
+                        MIS COMPRAS
+                    </h1>
+                </div>
+                <div className="px-6 overflow-y-scroll flex-1">
+                    {context.order.map((order, index) => (
+                        <Link to={`/my-order/${index}`} key={index}>
+                            <OrdersCard
+                                key={index}
+                                totalPrice={order.checkout.totalPrice}
+                                totalProducts={order.checkout.totalProducts}
+                                products = {order.checkout.products}
+                                address = {order.account.address}
+                                name= {order.account.name +' '+order.account.lastname}
+                                phone = {order.account.phone}
+                                date = {order.checkout.date}
+                            />
+                        </Link>
+                    ))}
+                </div>
             </div>
         </Layout>
     );

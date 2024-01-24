@@ -4,7 +4,7 @@ import { PlusIcon, MinusIcon } from "@heroicons/react/24/solid";
 import { totalPrice } from "../../utils";
 const QuantityInput = ({ product }) => {
     const context = useContext(ShoppingCartContext);
-    const [quantity, setQuantity] = useState(product.cant);
+    const [quantity, setQuantity] = useState(product ? product.cant : 1);
 
     const handleQuantityProduct = (value) => {
         // Update local state
@@ -38,7 +38,7 @@ const QuantityInput = ({ product }) => {
             </div>
             <input
                 className="border border-gray-300 rounded-md focus:outline-none text-center h-[40px]"
-                value={quantity}
+                value={quantity} disabled
             />
             <div className="bg-nutri p-1 w-10 h-10 text-white flex justify-center items-center">
                 <MinusIcon

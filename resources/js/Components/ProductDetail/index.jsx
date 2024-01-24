@@ -5,9 +5,8 @@ import "./index.css";
 import { QuantityInput } from "../QuantityInput";
 const ProductDetail = () => {
     const context = useContext(ShoppingCartContext);
-    const [quantity, setQuantity] = useState(1);
     return (
-        <aside
+        <div
             className={`${
                 context.isProductDetailOpen ? "flex" : "hidden"
             } product-detail flex-col fixed bg-white right-0 border boder border-green rounded-lg p-2`}
@@ -43,7 +42,7 @@ const ProductDetail = () => {
                     agregar al carrito{" "}
                 </button>
             </p>
-        </aside>
+        </div>
     );
 };
 export { ProductDetail };

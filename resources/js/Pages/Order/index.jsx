@@ -4,29 +4,43 @@ import { Layout } from "../../Components/Layout";
 import { OrderCard } from "../../Components/OrderCard";
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 import { ShoppingCartContext } from "../../Context";
+import { InputField } from "../../Components/InputField";
 import { QuantityInput } from "../../Components/QuantityInput";
 const Order = () => {
+    const context = useContext(ShoppingCartContext);
     const [formData, setFormData] = useState({
-        firstName: "",
-        lastName: "",
-        address: "",
-        city: "",
-        phone: "",
+        name: context.account.name ? context.account.name : "",
+        lastname: context.account.lastname ? context.account.lastname : "",
+        address: context.account.address ? context.account.address : "",
+        city: context.account.commune_id ? context.account.commune_id : "",
+        phone: context.account.phone ? context.account.phone : "",
     });
+    const [showAlert, setShowAlert] = useState(false);
+    const [colorAlert, setColorAlert] = useState("");
+    const [textAlert, setTextAlert] = useState("");
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
+        setFormData((prevData) => ({ ...prevData, [name]: value }));
     };
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("Form submitted:", formData);
+        let order = {
+            checkout: context.checkout,
+            account: formData,
+        };
+        // Update context.order directly with the new order
+        context.setOrder([...context.order, order]);
+        // Save the updated context.order to localStorage
+        localStorage.setItem(
+            "orders",
+            JSON.stringify([...context.order, order])
+        );
+        // Set alert properties
+        setShowAlert(true);
+        setColorAlert("bg-green-100");
+        setTextAlert("La orden ha sido creada");
     };
     const [view, setView] = useState("checkout");
-    const context = useContext(ShoppingCartContext);
-    console.log(context.account);
     const currentPath = window.location.pathname;
     let index = currentPath.substring(currentPath.lastIndexOf("/") + 1);
     if (index === "last") index = context.order?.length - 1;
@@ -103,68 +117,66 @@ const Order = () => {
                 </div>
             </>
         ) : (
-            <div class="flex flex justify-center items-center">
+            <div className="flex justify-center items-center">
                 <div className="flex flex-col items-end m-1">
-                    <h6 class="text-gray"> Información de Énvio </h6>
+                    <h6 className="text-gray"> Información de Énvio </h6>
                     <form className="mt-8" onSubmit={handleSubmit}>
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <label htmlFor="firstName">Nombre</label>
-                                <input
+                                <InputField
+                                    label="Nombre"
                                     type="text"
                                     id="name"
                                     name="name"
-                                    value={context.account.name !== undefined ? context.account.name : formData.name}
+                                    value={formData.name}
                                     onChange={handleChange}
-                                    className="w-full border p-2"
+                                    className=""
                                 />
                             </div>
                             <div>
-                                <label htmlFor="lastName">Apellido</label>
-                                <input
+                                <InputField
+                                    label="Apellido"
                                     type="text"
-                                    id="lastName"
-                                    name="lastName"
-                                    value={context.account.lastname !== undefined ? context.account.lastname : formData.lastname}
+                                    id="lastname"
+                                    name="lastname"
+                                    value={formData.lastname}
                                     onChange={handleChange}
-                                    className="w-full border p-2"
+                                    className=""
                                 />
                             </div>
                         </div>
                         <div className="mt-4">
-                            <label htmlFor="address">Dirección</label>
-                            <input
+                            <InputField
+                                label="Dirección"
                                 type="text"
                                 id="address"
                                 name="address"
-                                value={context.account.address !== undefined ? context.account.address : formData.address}
+                                value={formData.address}
                                 onChange={handleChange}
-                                className="w-full border p-2"
+                                className=""
                             />
                         </div>
                         <div className="grid grid-cols-2 gap-4 mt-4">
                             <div>
-                                <label htmlFor="city">Ciudad</label>
-                                <input
+                                <InputField
+                                    label="Ciudad"
                                     type="text"
                                     id="city"
                                     name="city"
-                                    value={context.account.commune_id !== undefined ? context.account.commune_id : formData.city}
+                                    value={formData.city}
                                     onChange={handleChange}
-                                    className="w-full border p-2"
+                                    className=""
                                 />
                             </div>
                             <div>
-                                <label htmlFor="phone">
-                                    Nro. de Telefono
-                                </label>
-                                <input
+                                <InputField
+                                    label="Nro. de Telefono"
                                     type="text"
                                     id="phone"
                                     name="phone"
-                                    value={context.account.phone !== undefined ? context.account.phone : formData.phone}
+                                    value={formData.phone}
                                     onChange={handleChange}
-                                    className="w-full border p-2"
+                                    className=""
                                 />
                             </div>
                         </div>
@@ -252,6 +264,19 @@ const Order = () => {
                     <h1 className="font-medium text-2xl uppercase dark-green flex justify-center items-center">
                         MI ORDEN
                     </h1>
+                </div>
+                <div
+                    className={
+                        showAlert
+                            ? `${colorAlert} border  px-4 py-3 rounded relative`
+                            : "hidden"
+                    }
+                    role="alert"
+                >
+                    <span className="block sm:inline">{textAlert}</span>
+                    <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
+                        <strong>X</strong>
+                    </span>
                 </div>
                 {renderView()}
             </div>

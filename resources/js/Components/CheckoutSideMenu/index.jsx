@@ -15,16 +15,17 @@ const CheckoutSideMenu = () => {
         context.setCartProducts(filteredProducts);
       };
     const handleCheckout = () => {
+        const currentDate = new Date(); 
         const orderToAdd = {
             date: `${currentDate.getDate()}.${currentDate.getMonth() + 1}.${currentDate.getFullYear()}`,
             products: context.cartProducts,
             totalProducts: context.cartProducts.length,
             totalPrice: totalPrice(context.cartProducts),
           };
-        context.setOrder([...context.order,orderToAdd]);
-        context.setCheckout(ordertToAdd);
+        context.setCheckout(orderToAdd);
         localStorage.setItem('checkout',JSON.stringify(orderToAdd));
         console.log(context.checkout,localStorage.getItem('checkout'));
+        return false;
     };
     return (
         <aside
@@ -41,9 +42,9 @@ const CheckoutSideMenu = () => {
                     />
                 </div>
             </div>
-            <div className="px-6 overflow-y-scroll flex-1" key="">
+            <div className="px-6 overflow-y-scroll flex-1">
                 {context.cartProducts.map((product,i) => (
-                    <>
+                    
                         <OrderCard key={i}
                             id={product.id}
                             title={product.title}
@@ -51,7 +52,6 @@ const CheckoutSideMenu = () => {
                             price={product.price}
                             handleDelete={handleDelete}
                         />
-                    </>
                 ))}
             </div>
             <div className="px-6">

@@ -14,7 +14,7 @@ export const ShoppingCartProvider = ({ children }) => {
     //order checkout
     const [checkout,setCheckout] = useState(localStorage.getItem('checkout') ? JSON.parse(localStorage.getItem('checkout')) : [])
     // orders for user.
-    const [order, setOrder] = useState([]);
+    const [order, setOrder] = useState(localStorage.getItem('orders') ? JSON.parse(localStorage.getItem('orders')) : []);
     // info detail item / product detail open/close.
     const [isProductDetailOpen, setIsProductDetailOpen] = useState(false);
     const openProductDetail = () => setIsProductDetailOpen(true);
