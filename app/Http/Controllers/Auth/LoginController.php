@@ -51,7 +51,7 @@ class LoginController extends Controller
             'email' => 'required|email:filter',
             'password' => 'required',
         ]);
-        $user = User::where('email', $request->email)->first();
+        $user = User::with('commune')->where('email', $request->email)->first();
         if (!$user || !Hash::check($request->password, $user->password ?? '')) {
             return response()->json([
                 'status' => 'failed',

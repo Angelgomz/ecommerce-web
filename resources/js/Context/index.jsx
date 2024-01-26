@@ -27,6 +27,8 @@ export const ShoppingCartProvider = ({ children }) => {
             ? JSON.parse(localStorage.getItem("orders"))
             : []
     );
+    //communes
+    const [communes,setCommunes] = useState([]);
     // info detail item / product detail open/close.
     const [isProductDetailOpen, setIsProductDetailOpen] = useState(false);
     const openProductDetail = () => setIsProductDetailOpen(true);
@@ -43,11 +45,16 @@ export const ShoppingCartProvider = ({ children }) => {
                 item.title.toLowerCase().includes(searchByTitle.toLowerCase())
             );
     };
-
     useEffect(() => {
         if (searchByTitle)
             setFilteredItems(filteredItemsByTitle(items, searchByTitle));
     }, [items, searchByTitle]);
+    useEffect(() =>{
+    fetch('api/communes', {
+        method: "GET",
+    }).then((response) => response.json())
+    .then((data) => setCommunes(data));
+    },[])
     return (
         <ShoppingCartContext.Provider
             value={{
@@ -72,6 +79,8 @@ export const ShoppingCartProvider = ({ children }) => {
                 closeCheckoutSideMenu,
                 account,
                 setAccount,
+                communes,
+                setCommunes,
                 signOut,
                 setSignOut,
                 checkout,

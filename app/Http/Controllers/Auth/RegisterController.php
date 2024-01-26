@@ -56,6 +56,8 @@ class RegisterController extends Controller
             'address' => ['required', 'string', 'max:300'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'phone' => ['string', 'regex:/^\+(?:[0-9] ?){6,14}[0-9]$/'],
+            'commune_id' => ['required', 'exists:communes,id'],
         ]);
     }
 
@@ -70,7 +72,7 @@ class RegisterController extends Controller
         $validator = $this->validator($request->all());
         if ($validator->fails())
             return response()->json(['success' => false, 'message' => 'Validation failed', 'errors' => $validator->errors()], 422);
-        $data = $request->only(['name', 'lastname', 'email', 'address', 'password']);
+        $data = $request->only(['name', 'lastname', 'email', 'address', 'password', 'commune_id', 'phone']);
         $data['password'] = Hash::make($data['password']);
         $user = User::create($data);
         return response()->json(['success' => true, 'message' => 'Usuario registrado', 'user' => $user], 200);

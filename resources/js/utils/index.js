@@ -4,5 +4,5 @@
  * @returns {number} Total price
  */
 export const totalPrice = (products) => {
-    return products.reduce((sum, product) => sum + product.cant * product.price, 0).toFixed(2);
+    return products.reduce((sum, product)=> sum + product.cant * product.price, 0).toFixed(2);
 };

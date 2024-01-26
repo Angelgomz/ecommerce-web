@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { InputField } from "../InputField";
+import { SelectField } from "../SelectField";
 import { PasswordToggle } from "../PasswordToggle";
 import { SubmitButton } from "../SubmitButton";
 import "./index.css";
@@ -26,6 +27,8 @@ const SignIn = ({ context }) => {
         name: "",
         lastname: "",
         address: "",
+        commune_id: "",
+        phone:"",
         password_confirmation: "",
         showPasswordRepeat: false,
     });
@@ -61,11 +64,10 @@ const SignIn = ({ context }) => {
         const baseUrl = view == "login" ? "/api/auth/login" : "/api/register";
         const formData = new FormData();
         const userState = view === "login" ? loginState : createUserState;
-
         Object.entries(userState).forEach(([key, value]) => {
             formData.append(key, value);
         });
-
+        console.log(formData);
         try {
             const response = await fetch(baseUrl, {
                 method: "POST",
@@ -121,7 +123,6 @@ const SignIn = ({ context }) => {
                 </p>
             </div>
         ));
-
     const renderView = () => {
         return (
             <div>
@@ -153,6 +154,13 @@ const SignIn = ({ context }) => {
                             )}
                             {renderErrorMessages("email")}
                             {renderInputField(
+                                "Telefono",
+                                "phone",
+                                createUserState.phone,
+                                "935486913"
+                            )}
+                            {renderErrorMessages("phone")}
+                            {renderInputField(
                                 "Dirección",
                                 "address",
                                 createUserState.address,
@@ -160,6 +168,13 @@ const SignIn = ({ context }) => {
                                 "123  Main Street, Providencia, Chile"
                             )}
                             {renderErrorMessages("address")}
+                            <SelectField
+                                label="Comuna"
+                                id="selectOption"
+                                value={createUserState.commune_id}
+                                onChange={(e) => handleInputChange('commune_id',e.target.value)}
+                                options={context.communes.communes}
+                            />
                             <PasswordToggle
                                 showPassword={createUserState.showPassword}
                                 handleTogglePassword={() =>

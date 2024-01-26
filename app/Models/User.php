@@ -23,6 +23,8 @@ class User extends Authenticatable
         'lastname',
         'address',
         'password',
+        'phone',
+        'commune_id'
     ];
 
     /**
@@ -43,4 +45,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    public function commune()
+    {
+        return $this->belongsTo(Commune::class);
+    }
 }

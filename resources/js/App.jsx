@@ -8,6 +8,7 @@ import Order from "./Pages/Order";
 import Orders from "./Pages/Orders";
 import Navbar from "./Components/Navbar";
 import SignIn from "./Pages/SignIn";
+import Account from "./Pages/Account";
 const AppRoutes = () => {
     const context = useContext(ShoppingCartContext);
     const isUserSignedIn =
@@ -19,6 +20,15 @@ const AppRoutes = () => {
         { path: "/store", element: <Store /> },
         { path: "/sign-in", element: <SignIn /> },
         { path: "/my-order", element: <Order /> },
+        {
+            path: "/account",
+            element:
+                isUserSignedIn && !isUserSignOut ? (
+                    <Account />
+                ) : (
+                    <Navigate replace to={"/sign-in"} />
+                ),
+        },
         {
             path: "/my-order/last",
             element:

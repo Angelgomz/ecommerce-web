@@ -5,25 +5,21 @@ import { totalPrice } from "../../utils";
 const QuantityInput = ({ product }) => {
     const context = useContext(ShoppingCartContext);
     const [quantity, setQuantity] = useState(product ? product.cant : 1);
-
     const handleQuantityProduct = (value) => {
-        // Update local state
         setQuantity(quantity + value);
-
-        // Create a new array with updated quantity
         const updatedProducts = context.checkout.products.map((item) =>
             item.id === product.id ? { ...item, cant: item.cant + value } : item
         );
-
-        // Update checkout object
         const updatedCheckout = {
             ...context.checkout,
             totalProducts: context.checkout.totalProducts + value,
             products: updatedProducts,
             totalPrice: totalPrice(updatedProducts),
         };
-
-        // Update context and local storage
+        const updatedCartProducts = context.cartProducts.map((item) =>
+            item.id === product.id ? { ...item, cant: item.cant + value } : item
+        );
+        context.setCartProducts(updatedCartProducts);
         context.setCheckout(updatedCheckout);
         localStorage.setItem("checkout", JSON.stringify(updatedCheckout));
     };

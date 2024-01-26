@@ -12,7 +12,7 @@ const Order = () => {
         name: context.account.name ? context.account.name : "",
         lastname: context.account.lastname ? context.account.lastname : "",
         address: context.account.address ? context.account.address : "",
-        city: context.account.commune_id ? context.account.commune_id : "",
+        city: context.account.commune_id ? context.account.commune.name : "",
         phone: context.account.phone ? context.account.phone : "",
     });
     const [showAlert, setShowAlert] = useState(false);
@@ -35,7 +35,6 @@ const Order = () => {
             "orders",
             JSON.stringify([...context.order, order])
         );
-        // Set alert properties
         setShowAlert(true);
         setColorAlert("bg-green-100");
         setTextAlert("La orden ha sido creada");
