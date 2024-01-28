@@ -1,30 +1,28 @@
-import React from 'react';
-
+import React, { useState } from "react";
 const Sidebar = () => {
+    const [isActive, setIsActive] = useState("my-data");
     return (
-        <div className="bg-gray-800 h-full w-64 fixed top-0 left-0 overflow-y-auto">
-            {/* Sidebar content */}
-            <div className="p-4 text-white">
-                <h1 className="text-2xl font-bold">Sidebar</h1>
-                <ul className="mt-4">
-                    <li className="py-2">
-                        <a href="#" className="block text-gray-300 hover:text-white">
-                            Dashboard
+        <div>
+            <div className="pl-10 text-white">
+                <ul className="">
+                    <li
+                        className={`m-3 rounded-md border-2 p-4 ${
+                            isActive == "my-data" ? "active bg-nutri text-white" : " border-gray-400 text-nutri"
+                        }`}
+                        onClick={() => setIsActive("my-data")}
+                    >
+                        <a href="" className="">
+                            Mis Datos
                         </a>
                     </li>
-                    <li className="py-2">
-                        <a href="#" className="block text-gray-300 hover:text-white">
-                            Projects
-                        </a>
-                    </li>
-                    <li className="py-2">
-                        <a href="#" className="block text-gray-300 hover:text-white">
-                            Messages
-                        </a>
-                    </li>
-                    <li className="py-2">
-                        <a href="#" className="block text-gray-300 hover:text-white">
-                            Settings
+                    <li
+                        className={`m-3 rounded-md border-2 p-4 ${
+                            isActive != "my-data" ? "active bg-nutri text-white": " border-gray-400 text-nutri"
+                        }`}
+                        onClick={() => setIsActive("desactive-account")}
+                    >
+                        <a href="#" className="">
+                            Desactivar Cuenta
                         </a>
                     </li>
                 </ul>
@@ -33,4 +31,4 @@ const Sidebar = () => {
     );
 };
 
-export {Sidebar};
+export { Sidebar };

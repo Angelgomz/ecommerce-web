@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CommuneController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\Auth\User\UserController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\AuthenticatedUserController;
 
 /*
@@ -25,7 +25,7 @@ use App\Http\Controllers\Auth\AuthenticatedUserController;
  *Route::put | Actualizar
  */
 Route::apiResource('/communes', CommuneController::class)->only('index');
-
+Route::apiResource('/users', UserController::class)->only('update','delete');
 Route::controller(LoginController::class)->prefix('auth')->name('auth.')->group(function () {
     Route::post('/login', 'login')->name('login');
     Route::post('/logout', 'logout')->name('logout');
