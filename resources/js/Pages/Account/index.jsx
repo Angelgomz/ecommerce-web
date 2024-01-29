@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import { ShoppingCartContext } from "../../Context";
+import AxiosInstance from "../../Components/AxiosInstance";
 import { InputField } from "../../Components/InputField";
 import { SubmitButton } from "../../Components/SubmitButton";
 import { Layout } from "../../Components/Layout";
@@ -14,29 +15,22 @@ const Account = () => {
 
     const handleInputChange = (name, value) => {
         setEditedData({ ...editedData, [name]: value });
-        console.log(editedData);
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setUserData({ ...editedData });
-        fetch(`api/users/${userData.id}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                name: userData.name,
-                lastname:userData.lastname,
-                email: userData.email,
-                address: userData.address,
-                phone: userData.phone,
-                commune_id:userData.commune_id
-            }),
-        })
-            .then((response) => response.json())
-            .then((data) => console.log(data))
-            .catch((error) => console.error("Error updating user:", error));
+        AxiosInstance.defaults.headers.common["Authorization"] = `Bearer ${context.account.plain_text_token}`;
+        AxiosInstance.put(`api/users/${userData.id}`,JSON.stringify({
+            name: editedData.name,
+            lastname: editedData.lastname,
+            email: editedData.email,
+            address: editedData.address,
+            phone: editedData.phone,
+            commune_id: editedData.commune_id,
+            token: editedData.token,
+        })).then((response) => {
+            console.log(response);
+        });
         setEditing(false);
     };
 

@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App \Http\Requests\UpdateUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 class UserController extends Controller
 {
+    
     /**
      * Display a listing of the resource.
      */
@@ -28,7 +29,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        
+
     }
 
     /**
@@ -52,7 +53,9 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, string $id)
     {
-        dd($request);
+        $data = $request->validated();
+        $user = auth()->user();
+        $user->update($data);
     }
 
     /**

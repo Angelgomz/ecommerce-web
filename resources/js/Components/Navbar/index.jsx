@@ -1,4 +1,5 @@
 import React, { Fragment, useContext, useState } from "react";
+import AxiosInstance from "../AxiosInstance";
 import { ShoppingCartContext } from "../../Context";
 import { NavLink } from "react-router-dom";
 import {
@@ -16,55 +17,50 @@ import "./index.css";
 
 const Navbar = () => {
     const activeStyle = "underline underline-offset-4";
-    const [openNavbarMobile, setOpenNavbarMobile] = useState(false);
     const context = useContext(ShoppingCartContext);
-    const isUserSignedIn =
-        context.account && Object.keys(context.account).length > 0;
-    const isUserSignOut =
-        context.signOut || JSON.parse(localStorage.getItem("sign-out"));
+    const [openNavbarMobile, setOpenNavbarMobile] = useState(false);
+    const isUserSignedIn = context.account && Object.keys(context.account).length > 0;
+    const isUserSignOut = context.signOut || JSON.parse(localStorage.getItem("sign-out"));
 
     const handleSignOut = () => {
-        localStorage.setItem("sign-out", JSON.stringify(true));
-        localStorage.setItem("account", JSON.stringify([]));
-        context.setSignOut(!context.setSignOut);
-        context.setAccount([]);
+        const { account, setSignOut, setAccount } = context;
+        AxiosInstance.defaults.headers.common["Authorization"] = `Bearer ${account.plain_text_token}`;
+        AxiosInstance.post("api/auth/logout")
+            .then((response) => {
+                localStorage.setItem("sign-out", JSON.stringify(true));
+                localStorage.setItem("account", JSON.stringify([]));
+                setSignOut(!setSignOut);
+                setAccount([]);
+            });
     };
 
-    const renderView = () =>
-        isUserSignedIn && !isUserSignOut ? (
-            <>
-                <NavLink
-                    to="/my-orders"
-                    className={({ isActive }) => (isActive ? activeStyle : "")}
-                >
-                    Mis compras
-                </NavLink >
-                <NavLink
-                  to="/account"
-                  className={({ isActive }) => (isActive ? activeStyle : "")}>
-                    <strong>{context.account?.email}</strong>
+    const renderView = () => {
+        if (isUserSignedIn && !isUserSignOut) {
+            return (
+                <>
+                    <NavLink to="/my-orders" className={({ isActive }) => (isActive ? activeStyle : "")}>
+                        Mis compras
+                    </NavLink>
+                    <NavLink to="/account" className={({ isActive }) => (isActive ? activeStyle : "")}>
+                        <strong>{context.account?.email}</strong>
+                    </NavLink>
+                    <li className={({ isActive }) => (isActive ? activeStyle : undefined)} onClick={handleSignOut}>
+                        Cerrar Sesión
+                    </li>
+                </>
+            );
+        } else {
+            return (
+                <NavLink to="/sign-in" className={({ isActive }) => (isActive ? activeStyle : undefined)} onClick={handleSignOut}>
+                    Ingresar
                 </NavLink>
-                <NavLink
-                    to="/sign-in"
-                    className={({ isActive }) =>
-                        isActive ? activeStyle : undefined
-                    }
-                    onClick={handleSignOut}
-                >
-                    Cerrar Sesión
-                </NavLink>
-            </>
-        ) : (
-            <NavLink
-                to="/sign-in"
-                className={({ isActive }) =>
-                    isActive ? activeStyle : undefined
-                }
-                onClick={handleSignOut}
-            >
-                Ingresar
-            </NavLink>
-        );
+            );
+        }
+    };
+
+    const toggleNavbarMobile = () => {
+        setOpenNavbarMobile(!openNavbarMobile);
+    };
 
     return (
         <Fragment>
@@ -76,10 +72,7 @@ const Navbar = () => {
                     </span>
                     <span className="flex md:gap-1">
                         <InboxIcon className="w-4" />
-                        <p className="text-sm md:text-md">
-                            {" "}
-                            info@nutrilicious.cl{" "}
-                        </p>
+                        <p className="text-sm md:text-md">info@nutrilicious.cl</p>
                     </span>
                     <span className="flex md:gap-1">
                         <MapPinIcon className="w-4" />
@@ -94,63 +87,30 @@ const Navbar = () => {
             <nav className="fixed z-10 top-10 w-full text-green text-sm font-light cursor-pointer flex flex-col bg-nutri px-0 py-3 md:flex-row md:justify-between md:px-2 md:text-white">
                 <ul className="flex items-center gap-3">
                     <li>
-                        <NavLink
-                            to="/"
-                            className={(isActive) =>
-                                isActive ? activeStyle : ""
-                            }
-                        >
+                        <NavLink to="/" className={(isActive) => (isActive ? activeStyle : "")}>
                             <img src={Logo} className="w-20" alt="logo" />
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink
-                            to="/"
-                            className={(isActive) =>
-                                isActive ? activeStyle : ""
-                            }
-                        >
+                        <NavLink to="/" className={(isActive) => (isActive ? activeStyle : "")}>
                             <HomeIcon />
                         </NavLink>
                     </li>
-                    <li
-                        className={`text-white text-lg absolute right-0 ${
-                            !openNavbarMobile ? "visible" : ""
-                        } md:hidden`}
-                    >
+                    <li className={`text-white text-lg absolute right-0 ${!openNavbarMobile ? "visible" : ""} md:hidden`} onClick={toggleNavbarMobile}>
                         {openNavbarMobile ? (
-                            <XMarkIcon
-                                onClick={() =>
-                                    setOpenNavbarMobile(!openNavbarMobile)
-                                }
-                                className="w-10"
-                            />
+                            <XMarkIcon className="w-10" />
                         ) : (
-                            <Bars3Icon
-                                onClick={() =>
-                                    setOpenNavbarMobile(!openNavbarMobile)
-                                }
-                                className="w-10"
-                            />
+                            <Bars3Icon className="w-10" />
                         )}
                     </li>
                 </ul>
-                <ul
-                    className={`flex flex-col gap-3 ul-mobile ${
-                        openNavbarMobile ? "navbar-open" : "navbar-close"
-                    } md:text-white md:bg-nutri md:visible md:items-center md:flex-row`}
-                >
-                     <li>
-                        <NavLink to="/store">Tienda</NavLink>{" "}
+                <ul className={`flex flex-col gap-3 ul-mobile ${openNavbarMobile ? "navbar-open" : "navbar-close"} md:text-white md:bg-nutri md:visible md:items-center md:flex-row`}>
+                    <li>
+                        <NavLink to="/store">Tienda</NavLink>
                     </li>
                     {renderView()}
                     <li>
-                        <NavLink
-                            to="/cart"
-                            className={(isActive) =>
-                                isActive ? activeStyle : ""
-                            }
-                        >
+                        <NavLink to="/cart" className={(isActive) => (isActive ? activeStyle : "")}>
                             <div className="flex">
                                 <ShoppingBagIcon className="w-4 m-1" />
                                 {context.count}
@@ -162,5 +122,4 @@ const Navbar = () => {
         </Fragment>
     );
 };
-
 export default Navbar;

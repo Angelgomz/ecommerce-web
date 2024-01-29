@@ -25,12 +25,12 @@ use App\Http\Controllers\Auth\AuthenticatedUserController;
  *Route::put | Actualizar
  */
 Route::apiResource('/communes', CommuneController::class)->only('index');
-Route::apiResource('/users', UserController::class)->only('update','delete');
-Route::controller(LoginController::class)->prefix('auth')->name('auth.')->group(function () {
-    Route::post('/login', 'login')->name('login');
-    Route::post('/logout', 'logout')->name('logout');
+Route::apiResource('/users', UserController::class)->middleware('auth:sanctum')->only('update','delete');
+Route::group(['controller' => LoginController::class, 'prefix'=>'auth'], function () {
+    Route::post('login', 'login')->name('login');
+    Route::post('logout', 'logout')->name('logout')->middleware('auth:sanctum');
 });
-Route::controller(RegisterController::class)->middleware('guest:sanctum')->prefix('register')->group(function () {
+Route::controller(RegisterController::class)->prefix('register')->group(function () {
     Route::post('/', 'create')->name('register');
 });
 Route::group(['controller' => AuthenticatedUserController::class, 'prefix' => 'authentication'], function () {
@@ -38,7 +38,4 @@ Route::group(['controller' => AuthenticatedUserController::class, 'prefix' => 'a
     Route::get('/', 'show');
     /*  Route::put('/auth/update/info', 'updateInfo')->name('auth.update.info');
      Route::put('/auth/update/password', 'updatePassword')->name('auth.update.password'); */
-});
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
 });

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import AxiosInstance from "../AxiosInstance";
 import { InputField } from "../InputField";
 import { SelectField } from "../SelectField";
 import { PasswordToggle } from "../PasswordToggle";
@@ -28,7 +29,7 @@ const SignIn = ({ context }) => {
         lastname: "",
         address: "",
         commune_id: "",
-        phone:"",
+        phone: "",
         password_confirmation: "",
         showPasswordRepeat: false,
     });
@@ -61,45 +62,50 @@ const SignIn = ({ context }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const baseUrl = view == "login" ? "/api/auth/login" : "/api/register";
         const formData = new FormData();
         const userState = view === "login" ? loginState : createUserState;
+        const baseUrl = view == "login" ? "/api/auth/login" : "/api/register";
         Object.entries(userState).forEach(([key, value]) => {
             formData.append(key, value);
         });
-        console.log(formData);
-        try {
-            const response = await fetch(baseUrl, {
-                method: "POST",
-                responseType: "JSON",
-                body: formData,
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                displayErrors(errorData.errors);
-                return;
-            }
-
-            if (view != "login") {
-                setTextAlert("Usuario registrado, ahora solo debes ingresar.");
-                setColorAlert("bg-green-100");
-                setShowAlert(true);
-                setView("login");
-            } else {
-                let data = await response.json();
-                context.setAccount(data.user);
-                context.setSignOut(false);
-                localStorage.setItem("sign-out", JSON.stringify(false));
-                localStorage.setItem("account", JSON.stringify(data.user));
-                navigate("/");
-                return;
-            }
-        } catch (error) {
-            alert(
-                "An error occurred while submitting the form. Please try again."
-            );
-        }
+        formData
+            ? AxiosInstance.post(baseUrl, formData)
+                  .then((response) => {
+                      if (response.status >= 200 && response.status < 300) {
+                          if (view != "login") {
+                              setTextAlert(
+                                  "Usuario registrado, ahora solo debes ingresar."
+                              );
+                              setColorAlert("bg-green-700");
+                              setShowAlert(true);
+                              setView("login");
+                          } else {
+                              let data = response.data;
+                              context.setAccount(data.user);
+                              context.setSignOut(false);
+                              localStorage.setItem(
+                                  "sign-out",
+                                  JSON.stringify(false)
+                              );
+                              localStorage.setItem(
+                                  "account",
+                                  JSON.stringify(data.user)
+                              );
+                              navigate("/");
+                              return;
+                          }
+                      }
+                  })
+                  .catch((error) => {
+                      if (error.response.data.errors) {
+                          displayErrors(error.response.data.errors);
+                      } else {
+                          setTextAlert(error.response.data.msg);
+                          setColorAlert("bg-red-500");
+                          setShowAlert(true);
+                      }
+                  })
+            : null;
     };
 
     const renderInputField = (label, field, value, pattern, placeholder) => (
@@ -172,9 +178,15 @@ const SignIn = ({ context }) => {
                                 label="Comuna"
                                 id="selectOption"
                                 value={createUserState.commune_id}
-                                onChange={(e) => handleInputChange('commune_id',e.target.value)}
+                                onChange={(e) =>
+                                    handleInputChange(
+                                        "commune_id",
+                                        e.target.value
+                                    )
+                                }
                                 options={context.communes.communes}
                             />
+                            {renderErrorMessages("commune_id")}
                             <PasswordToggle
                                 showPassword={createUserState.showPassword}
                                 handleTogglePassword={() =>
@@ -267,7 +279,9 @@ const SignIn = ({ context }) => {
                     }
                     role="alert"
                 >
-                    <span className="block sm:inline">{textAlert}</span>
+                    <span className="block sm:inline text-white">
+                        {textAlert}
+                    </span>
                     <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
                         <strong>X</strong>
                     </span>

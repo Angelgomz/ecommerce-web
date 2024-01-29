@@ -21,14 +21,15 @@ class UpdateUserRequest extends FormRequest
      */
     public function rules(): array
     {
+       // dd($this->all());
+  
         return [
             'name' => ['string', 'max:255'],
             'lastname' => ['string', 'max:255'],
-            'address' => ['string', 'max:300'],
-            'email' => ['string', 'email', 'max:255', 'unique:users'],
-            'password' => ['string', 'min:8', 'confirmed'],
+           'address' => ['string', 'max:300'],
+           /* 'email' => ['string', 'email', 'max:255', 'unique:users'],
             'phone' =>['regex:/^\+(?:[0-9] ?){6,14}[0-9]$/'],
-            'commune_id' => ['exists:communes,id']
+            'commune_id' => ['exists:communes,id']  */ 
         ];
     }
 }

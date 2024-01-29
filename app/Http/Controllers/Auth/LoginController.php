@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
+
 class LoginController extends Controller
 {
     /*
@@ -21,25 +22,20 @@ class LoginController extends Controller
     |
     */
 
-    use AuthenticatesUsers;
-
     /**
      * Where to redirect users after login.
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    //  protected $redirectTo = RouteServiceProvider::HOME;
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('guest')->except('logout');
-    }
-     /**
+
+    /**
      * Authenticate the user.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -51,15 +47,29 @@ class LoginController extends Controller
             'email' => 'required|email:filter',
             'password' => 'required',
         ]);
-        $user = User::with('commune')->where('email', $request->email)->first();
-        if (!$user || !Hash::check($request->password, $user->password ?? '')) {
-            return response()->json([
-                'status' => 'failed',
-                'message' => 'Invalid credentials'
-                ], 401);
+
+        $user = User::where('email', $request->email)->first();
+        if (!$user && !Hash::check($request->password, $user->password ?? '')) {
+            return response([
+                'msg' => 'Credenciales incorrectas.'
+            ], 401);
         }
-        $token = $user->createToken($request->email);
-        return response()->json(['plain_text_token' => $token->plainTextToken,'user'=>$user],200);
-       
+
+        $token = $user->createToken($user->email);
+        $user['plain_text_token'] = $token->plainTextToken;
+        return response()->json(['user' => $user], 200);
+    }
+
+    /**
+     * Log the user out of the application.
+     *
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function logout(Request $request)
+    {
+        auth()->user()->tokens()->delete();
+        $request->user()->tokens()->delete();
+        return response()->json(['success'=>true], 200);
     }
 }

@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect } from "react";
+import AxiosInstance from "../Components/AxiosInstance";
 export const ShoppingCartContext = createContext();
 export const ShoppingCartProvider = ({ children }) => {
     // my acount
@@ -28,7 +29,7 @@ export const ShoppingCartProvider = ({ children }) => {
             : []
     );
     //communes
-    const [communes,setCommunes] = useState([]);
+    const [communes, setCommunes] = useState([]);
     // info detail item / product detail open/close.
     const [isProductDetailOpen, setIsProductDetailOpen] = useState(false);
     const openProductDetail = () => setIsProductDetailOpen(true);
@@ -49,12 +50,11 @@ export const ShoppingCartProvider = ({ children }) => {
         if (searchByTitle)
             setFilteredItems(filteredItemsByTitle(items, searchByTitle));
     }, [items, searchByTitle]);
-    useEffect(() =>{
-    fetch('api/communes', {
-        method: "GET",
-    }).then((response) => response.json())
-    .then((data) => setCommunes(data));
-    },[])
+    useEffect(() => {
+        AxiosInstance.get("api/communes").then((response) => {
+            setCommunes(response.data);
+        });
+    }, []);
     return (
         <ShoppingCartContext.Provider
             value={{

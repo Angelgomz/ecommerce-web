@@ -36,7 +36,7 @@ const Order = () => {
             JSON.stringify([...context.order, order])
         );
         setShowAlert(true);
-        setColorAlert("bg-green-100");
+        setColorAlert("bg-green-700");
         setTextAlert("La orden ha sido creada");
     };
     const [view, setView] = useState("checkout");

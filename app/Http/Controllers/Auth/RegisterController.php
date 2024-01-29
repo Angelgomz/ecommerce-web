@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
 use App\Models\User;
-use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
@@ -23,14 +21,14 @@ class RegisterController extends Controller
     |
     */
 
-    use RegistersUsers;
+  //  use RegistersUsers;
 
     /**
      * Where to redirect users after registration.
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+ /*   protected $redirectTo = RouteServiceProvider::HOME; */ 
 
     /**
      * Create a new controller instance.
@@ -39,7 +37,7 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest');
+      //  $this->middleware('guest');
     }
 
     /**
@@ -56,7 +54,7 @@ class RegisterController extends Controller
             'address' => ['required', 'string', 'max:300'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'phone' => ['string', 'regex:/^\+(?:[0-9] ?){6,14}[0-9]$/'],
+            'phone' => ['string', 'regex:/^\+(?:[0-9] ?){6,14}[0-9]$/','unique:users'],
             'commune_id' => ['required', 'exists:communes,id'],
         ]);
     }
