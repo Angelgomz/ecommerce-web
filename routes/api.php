@@ -1,12 +1,10 @@
 <?php
-
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CommuneController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\Auth\AuthenticatedUserController;
+use App\Http\Controllers\Admin\ProductController as AdminProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,18 +22,16 @@ use App\Http\Controllers\Auth\AuthenticatedUserController;
  *Route::delete | Eliminar
  *Route::put | Actualizar
  */
+/*Public routes */
+Route::post('/auth/login', [LoginController::class, 'login'])->name('login');
+Route::post('register', [RegisterController::class, 'create'])->name('register');
 Route::apiResource('/communes', CommuneController::class)->only('index');
-Route::apiResource('/users', UserController::class)->middleware('auth:sanctum')->only('update','delete');
-Route::group(['controller' => LoginController::class, 'prefix'=>'auth'], function () {
-    Route::post('login', 'login')->name('login');
-    Route::post('logout', 'logout')->name('logout')->middleware('auth:sanctum');
+/* Protected routes */
+Route::group(['middleware' => 'auth:sanctum'], function () {
+    Route::post('/auth/logout', [LoginController::class, 'logout'])->name('logout');
+    Route::group(['middleware' => 'access'], function () {
+        Route::apiResource('/admin/products', AdminProductController::class);
+        Route::apiResource('/users', UserController::class)->only('update', 'destroy');
+    });
 });
-Route::controller(RegisterController::class)->prefix('register')->group(function () {
-    Route::post('/', 'create')->name('register');
-});
-Route::group(['controller' => AuthenticatedUserController::class, 'prefix' => 'authentication'], function () {
 
-    Route::get('/', 'show');
-    /*  Route::put('/auth/update/info', 'updateInfo')->name('auth.update.info');
-     Route::put('/auth/update/password', 'updatePassword')->name('auth.update.password'); */
-});

@@ -19,7 +19,8 @@ const Account = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        AxiosInstance.defaults.headers.common["Authorization"] = `Bearer ${context.account.plain_text_token}`;
+        setUserData(editedData);
+        AxiosInstance.defaults.headers.common["Authorization"] = `Bearer ${context.plain_text_token}`;
         AxiosInstance.put(`api/users/${userData.id}`,JSON.stringify({
             name: editedData.name,
             lastname: editedData.lastname,
@@ -29,7 +30,11 @@ const Account = () => {
             commune_id: editedData.commune_id,
             token: editedData.token,
         })).then((response) => {
-            console.log(response);
+            localStorage.setItem(
+                "account",
+                JSON.stringify(response.data.user)
+            );
+            context.setAccount(response.data.user);
         });
         setEditing(false);
     };
@@ -61,7 +66,7 @@ const Account = () => {
                                             e.target.value
                                         )
                                     }
-                                    placeholder="Lucia"
+                                    placeholder ="Lucia"
                                 />
                             </div>
                             <div className="m-2">

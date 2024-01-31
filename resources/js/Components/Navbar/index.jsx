@@ -23,12 +23,13 @@ const Navbar = () => {
     const isUserSignOut = context.signOut || JSON.parse(localStorage.getItem("sign-out"));
 
     const handleSignOut = () => {
-        const { account, setSignOut, setAccount } = context;
-        AxiosInstance.defaults.headers.common["Authorization"] = `Bearer ${account.plain_text_token}`;
+        const { setSignOut, setAccount, plain_text_token } = context;
+        AxiosInstance.defaults.headers.common["Authorization"] = `Bearer ${context.plain_text_token}`;
         AxiosInstance.post("api/auth/logout")
             .then((response) => {
                 localStorage.setItem("sign-out", JSON.stringify(true));
                 localStorage.setItem("account", JSON.stringify([]));
+                localStorage.setItem("plain_text_token","");
                 setSignOut(!setSignOut);
                 setAccount([]);
             });

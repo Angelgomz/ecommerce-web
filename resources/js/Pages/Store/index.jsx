@@ -6,15 +6,13 @@ import { ProductDetail } from "../../Components/ProductDetail";
 import { CheckoutSideMenu } from "../../Components/CheckoutSideMenu";
 
 const Store = () => {
-    const [items, setItems] = useState(null);
+    const [items] = useState(null);
     const context = useContext(ShoppingCartContext);
-
     useEffect(() => {
         fetch("https://fakestoreapi.com/products")
             .then((response) => response.json())
             .then((data) => context.setItems(data));
     }, []);
-
     const renderView = (items) => {
         items =
             context.searchByTitle?.length > 0 ? context.filteredItems : context.items;

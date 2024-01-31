@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
@@ -73,6 +74,8 @@ class RegisterController extends Controller
         $data = $request->only(['name', 'lastname', 'email', 'address', 'password', 'commune_id', 'phone']);
         $data['password'] = Hash::make($data['password']);
         $user = User::create($data);
+        $user->assignRole('client');
+        $user->load('commune');
         return response()->json(['success' => true, 'message' => 'Usuario registrado', 'user' => $user], 200);
     }
 }

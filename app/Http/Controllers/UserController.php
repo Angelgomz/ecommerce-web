@@ -56,6 +56,7 @@ class UserController extends Controller
         $data = $request->validated();
         $user = auth()->user();
         $user->update($data);
+        return response()->json(['user' => $user]);
     }
 
     /**

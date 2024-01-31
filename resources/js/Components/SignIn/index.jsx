@@ -82,6 +82,7 @@ const SignIn = ({ context }) => {
                           } else {
                               let data = response.data;
                               context.setAccount(data.user);
+                              context.setPlainTextToken(data.user.plain_text_token);
                               context.setSignOut(false);
                               localStorage.setItem(
                                   "sign-out",
@@ -91,6 +92,10 @@ const SignIn = ({ context }) => {
                                   "account",
                                   JSON.stringify(data.user)
                               );
+                              localStorage.setItem(
+                                "plain_text_token",
+                                JSON.stringify(data.user.plain_text_token)
+                            );
                               navigate("/");
                               return;
                           }

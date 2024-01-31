@@ -8,6 +8,12 @@ export const ShoppingCartProvider = ({ children }) => {
             ? JSON.parse(localStorage.getItem("account"))
             : []
     );
+    // token.
+    const [plain_text_token, setPlainTextToken] = useState(
+        localStorage.getItem("plain_text_token")
+            ? JSON.parse(localStorage.getItem("plain_text_token"))
+            : []
+    );
     //sing in - sign out
     const [signOut, setSignOut] = useState();
     // items for sale.
@@ -79,6 +85,8 @@ export const ShoppingCartProvider = ({ children }) => {
                 closeCheckoutSideMenu,
                 account,
                 setAccount,
+                plain_text_token,
+                setPlainTextToken, 
                 communes,
                 setCommunes,
                 signOut,
