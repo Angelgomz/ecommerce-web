@@ -45,4 +45,14 @@ class Handler extends ExceptionHandler
             //
         });
     }
+    public function report(Throwable $e)
+    {
+      //Function that reports errors from our app to others apps.
+    }
+    public function render($request, Throwable $e)
+    {
+       
+        //Para el manejo de las excepciones desde adentro.
+       
+    }
 }

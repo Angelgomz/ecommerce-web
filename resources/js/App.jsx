@@ -9,15 +9,18 @@ import Orders from "./Pages/Orders";
 import Navbar from "./Components/Navbar";
 import SignIn from "./Pages/SignIn";
 import Account from "./Pages/Account";
+import AdminProducts from "./Pages/AdminProducts";
 const AppRoutes = () => {
     const context = useContext(ShoppingCartContext);
     const isUserSignedIn =
         context.account && Object.keys(context.account).length > 0;
     const isUserSignOut =
-        context.signOut || JSON.parse(localStorage.getItem("sign-out"));
+        context.signOut || JSON.parse(localStorage.getItem("signOut"));
+    const isAdmin =  context.signOut || JSON.parse(localStorage.getItem("isAdmin"));
     let routes = useRoutes([
         { path: "/", element: <Home /> },
         { path: "/store", element: <Store /> },
+        { path: "/products", element: <AdminProducts /> },
         { path: "/sign-in", element: <SignIn /> },
         { path: "/my-order", element: <Order /> },
         {
@@ -56,6 +59,15 @@ const AppRoutes = () => {
             element:
                 isUserSignedIn && !isUserSignOut ? (
                     <Orders />
+                ) : (
+                    <Navigate replace to={"/sign-in"} />
+                ),
+        },
+        {
+            path: "/adminProducts",
+            element:
+                isUserSignedIn && !isUserSignOut && isAdmin ? (
+                    <AdminProducts />
                 ) : (
                     <Navigate replace to={"/sign-in"} />
                 ),

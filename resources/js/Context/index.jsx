@@ -8,9 +8,15 @@ export const ShoppingCartProvider = ({ children }) => {
             ? JSON.parse(localStorage.getItem("account"))
             : []
     );
+    //role
+    const [isAdmin, setIsAdmin] = useState(
+        localStorage.getItem("isAdmin")
+            ? JSON.parse(localStorage.getItem("isAdmin"))
+            : []
+    );
     // token.
-    const [plain_text_token, setPlainTextToken] = useState(
-        localStorage.getItem("plain_text_token")
+    const [plainTextToken, setPlainTextToken] = useState(
+        localStorage.getItem("plainTextToken")
             ? JSON.parse(localStorage.getItem("plain_text_token"))
             : []
     );
@@ -85,12 +91,14 @@ export const ShoppingCartProvider = ({ children }) => {
                 closeCheckoutSideMenu,
                 account,
                 setAccount,
-                plain_text_token,
-                setPlainTextToken, 
+                plainTextToken,
+                setPlainTextToken,
                 communes,
                 setCommunes,
                 signOut,
                 setSignOut,
+                isAdmin,
+                setIsAdmin,
                 checkout,
                 setCheckout,
             }}

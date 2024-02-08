@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::get('/exception', function() {
+    throw new \Exception('Soy una excepción');
+});
 Route::get('{reactRoutes}', function () {
     return view('welcome'); // your start view
 })->where('reactRoutes', '^((?!api).)*$'); // except 'api' word

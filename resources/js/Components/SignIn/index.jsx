@@ -83,17 +83,22 @@ const SignIn = ({ context }) => {
                               let data = response.data;
                               context.setAccount(data.user);
                               context.setPlainTextToken(data.user.plain_text_token);
+                              context.setIsAdmin(data.user?.roles?.name == 'admin' ?  true: false);
                               context.setSignOut(false);
                               localStorage.setItem(
-                                  "sign-out",
+                                  "signOut",
                                   JSON.stringify(false)
                               );
+                              localStorage.setItem(
+                                "isAdmin",
+                                JSON.stringify(data.user?.roles[0].name == 'admin' ?  true: false)
+                            );
                               localStorage.setItem(
                                   "account",
                                   JSON.stringify(data.user)
                               );
                               localStorage.setItem(
-                                "plain_text_token",
+                                "plainTextToken",
                                 JSON.stringify(data.user.plain_text_token)
                             );
                               navigate("/");
