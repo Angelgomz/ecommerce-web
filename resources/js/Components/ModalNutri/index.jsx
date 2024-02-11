@@ -11,7 +11,7 @@ const ModalNutri = () => {
     const [createProductState, setProductState] = useState({
         name: "",
         description: "",
-        categoryid: "",
+        category_id: "",
         image: "",
         price: "",
         stock:"",
@@ -26,7 +26,7 @@ const ModalNutri = () => {
     const renderInputField = (label, field, value, pattern, placeholder) => (
         <InputField
             label={label}
-            type={field === "email" ? "email" : "text"}
+            type={field === "image" ? "file" : "text"}
             id={`grid-${field}`}
             value={value}
             placeholder={placeholder}
@@ -83,17 +83,33 @@ const ModalNutri = () => {
                                                 {renderInputField(
                                                     "Descripción",
                                                     "description",
+                                                    createProductState.description,
+                                                )}
+                                                {renderErrorMessages("description")}
+                                                </div>
+                                                  <div>
+                                                {renderInputField(
+                                                    "Imagen",
+                                                    "image",
+                                                    createProductState.image,
+                                                )}
+                                                {renderErrorMessages("stock")}
+                                                </div>
+                                                <div>
+                                                {renderInputField(
+                                                    "Precio",
+                                                    "price",
                                                     createProductState.price,
                                                 )}
                                                 {renderErrorMessages("price")}
                                                 </div>
                                                 <div>
                                                 {renderInputField(
-                                                    "Price",
-                                                    "precio",
-                                                    createProductState.price,
+                                                    "Stock",
+                                                    "stock",
+                                                    createProductState.stock,
                                                 )}
-                                                {renderErrorMessages("price")}
+                                                {renderErrorMessages("stock")}
                                                 </div>
                                                 <div>
                                                 <SubmitButton className="mt-3"/>
