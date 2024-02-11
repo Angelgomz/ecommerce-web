@@ -1,111 +1,83 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { ShoppingCartContext } from "../../Context";
 import AxiosInstance from "../../Components/AxiosInstance";
 import { Layout } from "../../Components/Layout";
+import { ModalNutri } from "../../Components/ModalNutri";
 import DataTable from "react-data-table-component";
+import { PlusCircleIcon } from "@heroicons/react/24/solid";
 
 const AdminProducts = () => {
     const context = useContext(ShoppingCartContext);
-    const [userData, setUserData] = useState(context.account);
-    const [editing, setEditing] = useState(false);
-    const [editedData, setEditedData] = useState({ ...userData });
-    const data = [
-        {
-            id: 1,
-            name: "Producto 1",
-            description: "Descripción del producto 1",
-            price: "$10.00",
-            category: "Categoría A",
-            image: "imagen1.jpg",
-        },
-        {
-            id: 2,
-            name: "Producto 2",
-            description: "Descripción del producto 2",
-            price: "$20.00",
-            category: "Categoría B",
-            image: "imagen2.jpg",
-        },
-        // Añade más objetos de productos según sea necesario
-    ];
-
+    const [productsData, setProductsData] = useState([]);
     const columns = [
         {
             name: "Nombre",
-            selector: "name",
-            sortable: true,
+            selector: (row) => row.title,
         },
         {
-            name: "Descripción",
-            selector: "description",
-            sortable: true,
-        },
-        {
-            name: "Precio",
-            selector: "price",
-            sortable: true,
-        },
-        {
-            name: "Categoría",
-            selector: "category",
-            sortable: true,
+            name: "Categoria",
+            selector: (row) => row.year,
         },
         {
             name: "Imagen",
-            cell: (row) => (
-                <img
-                    src={row.image}
-                    alt={row.name}
-                    style={{ width: "50px", height: "50px" }}
-                />
-            ),
-            sortable: false,
+            selector: (row) => row.year,
+        },
+        {
+            name: "Precio",
+            selector: (row) => row.year,
+        },
+        {
+            name: "Stock",
+            selector: (row) => row.year,
         },
     ];
-
-    const handleInputChange = (name, value) => {
-        setEditedData({ ...editedData, [name]: value });
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        setUserData(editedData);
+    let data = [
+        {
+            id: 1,
+            title: "Beetlejuice",
+            year: "1988",
+        },
+        {
+            id: 2,
+            title: "Ghostbusters",
+            year: "1984",
+        },
+    ];
+    useEffect(() => {
         AxiosInstance.defaults.headers.common[
             "Authorization"
         ] = `Bearer ${context.plain_text_token}`;
-        AxiosInstance.put(
-            `api/users/${userData.id}`,
-            JSON.stringify({
-                name: editedData.name,
-                lastname: editedData.lastname,
-                email: editedData.email,
-                address: editedData.address,
-                phone: editedData.phone,
-                commune_id: editedData.commune_id,
-                token: editedData.token,
-            })
-        ).then((response) => {
-            localStorage.setItem("account", JSON.stringify(response.data.user));
-            context.setAccount(response.data.user);
+        AxiosInstance.get(`api/admin/products`).then((response) => {
+          //  console.log(response);
+            //   localStorage.setItem("account", JSON.stringify(response.data.user));
+            //  context.setAccount(response.data.user);
         });
-        setEditing(false);
+        setProductsData(data);
+    }, []);
+    const handleSubmit = (e) => {
+        e.preventDefault();
+      //  setUserData(editedData);
     };
 
     return (
         <Layout>
+            <ModalNutri/>
             <div className="flex flex-col">
                 <div className="flex items-center justify-center m-5">
                     <h1 className="font-medium text-4xl uppercase dark-green">
                         MIS PRODUCTOS
                     </h1>
                 </div>
-                <div>
+                <div className="p-10">
+                    <div className="flex justify-center items-center w-20 rounded-lg m-2 p-1 text-white bg-nutri"
+                    onClick={() => context.setIsOpenModal(true)}>
+                        <PlusCircleIcon> </PlusCircleIcon>
+                        <p> agregar </p>
+                    </div>
                     <DataTable
-                        title="Lista de Productos"
                         columns={columns}
-                        data={data}
+                        data={productsData}
                         pagination
-                        selectableRows // Para permitir selección de filas
                     />
                 </div>
             </div>
