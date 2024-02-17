@@ -1,10 +1,16 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ShoppingCartContext } from "../../Context";
 import { InputField } from "../InputField";
 import { SubmitButton } from "../SubmitButton";
+import AxiosInstance from "../AxiosInstance";
 import { SelectField } from "../SelectField";
 const ModalNutri = () => {
     const context = useContext(ShoppingCartContext);
+     console.log(context);
+    const [showAlert, setShowAlert] = useState(false);
+    const [textAlert, setTextAlert] = useState(false);
+    const [colorAlert, setColorAlert] = useState(false);
+    const [categories, setCategories] = useState(null);
     const closeModal = () => {
         context.setIsOpenModal(false);
     };
@@ -14,25 +20,102 @@ const ModalNutri = () => {
         category_id: "",
         image: "",
         price: "",
-        stock:"",
+        stock: "",
     });
     const displayErrors = (errors) => {
         setErrorMessages(errors);
     };
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const formData = new FormData();
+        const productState = createProductState;
+        const baseUrl = "/api/admin/products";
+        AxiosInstance.defaults.headers.common[
+            "Authorization"
+        ] = `Bearer ${context.plainTextToken}`;
+        AxiosInstance.defaults.headers.common["Content-Type"] = "multipart/form-data";
+        AxiosInstance.defaults.headers.common["processData"] = false;
+        AxiosInstance.defaults.headers.common["cache"] = false;
+            //remove accept 
+          // and that two 'contentType': false,
+           // 'processData': false
+        Object.entries(productState).forEach(([key, value]) => {
+            formData.append(key, value);
+        });
+        formData
+            ? AxiosInstance.post(baseUrl, formData, {})
+                  .then((response) => {
+                      if (response.status >= 200 && response.status < 300) {
+                        console.log(response);
+                          let data = response.data;
+                          /* context.setAccount(data.user);
+                              context.setPlainTextToken(
+                                  data.user.plain_text_token
+                              );
+                              context.setIsAdmin(
+                                  data.user?.roles?.name == "admin"
+                                      ? true
+                                      : false
+                              );
+                              context.setSignOut(false);
+                              localStorage.setItem(
+                                  "signOut",
+                                  JSON.stringify(false)
+                              );
+                              localStorage.setItem(
+                                  "isAdmin",
+                                  JSON.stringify(
+                                      data.user?.roles[0].name == "admin"
+                                          ? true
+                                          : false
+                                  )
+                              );
+                              localStorage.setItem(
+                                  "account",
+                                  JSON.stringify(data.user)
+                              );
+                              localStorage.setItem(
+                                  "plainTextToken",
+                                  JSON.stringify(data.user.plain_text_token)
+                              );
+                              navigate("/");
+                              return;
+                          } */
+                      }
+                  })
+                  .catch((error) => {
+                      if (error.response.data.errors) {
+                          displayErrors(error.response.data.errors);
+                      } else {
+                          setTextAlert(error.response.data.msg);
+                          setColorAlert("bg-red-500");
+                          setShowAlert(true);
+                      }
+                  })
+            : null;
+    };
     const handleInputChange = (field, value) => {
+        console.log(field,value);
         const stateUpdater = setProductState;
+        if (field == "image") {
+            value = value.files[0];
+        } else {
+            value = value.value;
+        }
         stateUpdater((prevState) => ({ ...prevState, [field]: value }));
     };
     const renderInputField = (label, field, value, pattern, placeholder) => (
-        <InputField
-            label={label}
-            type={field === "image" ? "file" : "text"}
-            id={`grid-${field}`}
-            value={value}
-            placeholder={placeholder}
-            onChange={(e) => handleInputChange(field, e.target.value)}
-            pattern={pattern ? pattern.source : undefined}
-        />
+        <>
+            <InputField
+                label={label}
+                type={field === "image" ? "file" : "text"}
+                id={`grid-${field}`}
+                value={value}
+                placeholder={placeholder}
+                onChange={(e) => handleInputChange(field, e.target)}
+                pattern={pattern ? pattern.source : undefined}
+            />
+        </>
     );
     const [errorMessages, setErrorMessages] = useState([]);
     const renderErrorMessages = (field) =>
@@ -44,6 +127,18 @@ const ModalNutri = () => {
                 </p>
             </div>
         ));
+        useEffect(() => {
+            const baseUrl = "/api/categories/";
+            AxiosInstance.defaults.headers.common[
+                "Authorization"
+            ] = `Bearer ${context.plainTextToke}`;
+             AxiosInstance.get(baseUrl)
+                      .then((response) => {
+                            setCategories(response.data);
+                      })
+                      .catch((error) => {
+                      })
+        },[]);
     return (
         <div>
             {context.modal && (
@@ -71,50 +166,85 @@ const ModalNutri = () => {
                                             Crear Producto
                                         </h3>
                                         <div className="mt-2">
-                                            <div>
-                                                {renderInputField(
-                                                    "Nombre",
-                                                    "name",
-                                                    createProductState.name,
+                                            <form
+                                                className="w-full max-w-lg"
+                                                onSubmit={handleSubmit}
+                                            >
+                                                <div>
+                                                    <SelectField
+                                                        label="Category"
+                                                        id="selectOption"
+                                                        value={
+                                                            createProductState.category_id
+                                                        }
+                                                        onChange={(e) =>
+                                                            handleInputChange(
+                                                                "category_id",
+                                                                e.target
+                                                            )
+                                                        }
+                                                        options={
+                                                            categories
+                                                        }
+                                                    />
+                                                </div>
+                                                {renderErrorMessages(
+                                                    "commune_id"
                                                 )}
-                                                {renderErrorMessages("name")}
+                                                <div>
+                                                    {renderInputField(
+                                                        "Nombre",
+                                                        "name",
+                                                        createProductState.name
+                                                    )}
+                                                    {renderErrorMessages(
+                                                        "name"
+                                                    )}
                                                 </div>
                                                 <div>
-                                                {renderInputField(
-                                                    "Descripción",
-                                                    "description",
-                                                    createProductState.description,
-                                                )}
-                                                {renderErrorMessages("description")}
-                                                </div>
-                                                  <div>
-                                                {renderInputField(
-                                                    "Imagen",
-                                                    "image",
-                                                    createProductState.image,
-                                                )}
-                                                {renderErrorMessages("stock")}
+                                                    {renderInputField(
+                                                        "Descripción",
+                                                        "description",
+                                                        createProductState.description
+                                                    )}
+                                                    {renderErrorMessages(
+                                                        "description"
+                                                    )}
                                                 </div>
                                                 <div>
-                                                {renderInputField(
-                                                    "Precio",
-                                                    "price",
-                                                    createProductState.price,
-                                                )}
-                                                {renderErrorMessages("price")}
+                                                    {renderInputField(
+                                                        "Imagen",
+                                                        "image",
+                                                        createProductState.image
+                                                    )}
+                                                    {renderErrorMessages(
+                                                        "image"
+                                                    )}
                                                 </div>
                                                 <div>
-                                                {renderInputField(
-                                                    "Stock",
-                                                    "stock",
-                                                    createProductState.stock,
-                                                )}
-                                                {renderErrorMessages("stock")}
+                                                    {renderInputField(
+                                                        "Precio",
+                                                        "price",
+                                                        createProductState.price
+                                                    )}
+                                                    {renderErrorMessages(
+                                                        "price"
+                                                    )}
                                                 </div>
                                                 <div>
-                                                <SubmitButton className="mt-3"/>
+                                                    {renderInputField(
+                                                        "Stock",
+                                                        "stock",
+                                                        createProductState.stock
+                                                    )}
+                                                    {renderErrorMessages(
+                                                        "stock"
+                                                    )}
                                                 </div>
-                                      
+                                                <div>
+                                                    <SubmitButton className="mt-3" />
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>

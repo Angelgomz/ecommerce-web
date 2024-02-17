@@ -17,6 +17,7 @@ class PermissionTableSeeder extends Seeder
                 ['name' => 'edit recipe' , 'route_name' => 'recipes.edit'],
                 ['name' => 'update recipe' , 'route_name' => 'recipes.update'],
                 ['name' => 'delete recipe' , 'route_name' => 'recipes.destroy'],
+                ['name' => 'index producs' , 'route_name' => 'products.index'],
                 ['name' => 'add product' , 'route_name' => 'products.store'],
                 ['name' => 'edit product' , 'route_name' => 'products.edit'],
                 ['name' => 'update product' , 'route_name' => 'products.update'],

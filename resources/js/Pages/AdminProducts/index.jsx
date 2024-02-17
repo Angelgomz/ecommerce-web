@@ -46,7 +46,7 @@ const AdminProducts = () => {
     useEffect(() => {
         AxiosInstance.defaults.headers.common[
             "Authorization"
-        ] = `Bearer ${context.plain_text_token}`;
+        ] = `Bearer ${context.plainTextToken}`;
         AxiosInstance.get(`api/admin/products`).then((response) => {
           //  console.log(response);
             //   localStorage.setItem("account", JSON.stringify(response.data.user));

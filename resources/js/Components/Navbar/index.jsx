@@ -61,9 +61,6 @@ const Navbar = () => {
                         <strong>{context.account?.email}</strong>
                     </NavLink>
                     <li
-                        className={({ isActive }) =>
-                            isActive ? activeStyle : undefined
-                        }
                         onClick={handleSignOut}
                     >
                         Cerrar Sesión

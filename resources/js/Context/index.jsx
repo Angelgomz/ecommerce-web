@@ -17,7 +17,7 @@ export const ShoppingCartProvider = ({ children }) => {
     // token.
     const [plainTextToken, setPlainTextToken] = useState(
         localStorage.getItem("plainTextToken")
-            ? JSON.parse(localStorage.getItem("plain_text_token"))
+            ? JSON.parse(localStorage.getItem("plainTextToken"))
             : []
     );
     //sing in - sign out

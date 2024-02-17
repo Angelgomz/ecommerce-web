@@ -1,6 +1,7 @@
 import React from "react";
 
 const SelectField = ({ label, id, value, options, onChange }) => {
+  {console.log(options)}
   return (
     <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
       <label

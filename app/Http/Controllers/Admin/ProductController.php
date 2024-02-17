@@ -23,14 +23,14 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request)
     {
         $data = $request->validated();
+        $data['image'] = $data['name'];
         $product = Product::create($data);
-
         return response()->json([
             'status' => 'success',
             'data' => $product,
             'message' => 'Producto creado sastifactoriamente'
-        ]);
-    }
+        ]); 
+    } 
 
     public function update(UpdateProductRequest $request, Product $product)
     {

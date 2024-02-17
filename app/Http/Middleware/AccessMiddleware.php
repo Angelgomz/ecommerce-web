@@ -6,7 +6,6 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Models\Permission; 
-use App\Models\Role; 
 class AccessMiddleware
 {
     /**
@@ -18,7 +17,7 @@ class AccessMiddleware
     {
         $user = $request->user();
         $routeName = $request->route()->getName();
-        $permission = Permission::where('route_name', $routeName)->first();
+        $permission = Permission::where('route_name', $routeName)->firstOrFail();
         $permissions = $user->getPermissionsViaRoles()->pluck('name');
         if($permission && $permissions->contains($permission->name)){
             return $next($request);
