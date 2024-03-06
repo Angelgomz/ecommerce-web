@@ -5,12 +5,10 @@ import { InputField } from "../InputField";
 import { SelectField } from "../SelectField";
 import { PasswordToggle } from "../PasswordToggle";
 import { SubmitButton } from "../SubmitButton";
+import { Alert } from "../../Components/Alert";
 import "./index.css";
 const SignIn = ({ context }) => {
     const navigate = useNavigate();
-    const [showAlert, setShowAlert] = useState(false);
-    const [colorAlert, setColorAlert] = useState("");
-    const [textAlert, setTextAlert] = useState("");
     const [errorMessages, setErrorMessages] = useState([]);
     const [view, setView] = useState("login");
     const namePattern = /^[A-Za-z\s]+$/;
@@ -73,11 +71,11 @@ const SignIn = ({ context }) => {
                   .then((response) => {
                       if (response.status >= 200 && response.status < 300) {
                           if (view != "login") {
-                              setTextAlert(
+                              context.setTextAlert(
                                   "Usuario registrado, ahora solo debes ingresar."
                               );
-                              setColorAlert("bg-green-700");
-                              setShowAlert(true);
+                              context.setColorAlert("bg-green-700");
+                              context.setShowAlert(true);
                               setView("login");
                           } else {
                               let data = response.data;
@@ -110,9 +108,9 @@ const SignIn = ({ context }) => {
                       if (error.response.data.errors) {
                           displayErrors(error.response.data.errors);
                       } else {
-                          setTextAlert(error.response.data.msg);
-                          setColorAlert("bg-red-500");
-                          setShowAlert(true);
+                          context.setTextAlert(error.response.data.msg);
+                          context.setColorAlert("bg-red-500");
+                          context.setShowAlert(true);
                       }
                   })
             : null;
@@ -281,21 +279,7 @@ const SignIn = ({ context }) => {
     return (
         <div className="flex justify-center items-center mt-32">
             <form className="w-full max-w-lg" onSubmit={handleSubmit}>
-                <div
-                    className={
-                        showAlert
-                            ? `${colorAlert} border  px-4 py-3 rounded relative`
-                            : "hidden"
-                    }
-                    role="alert"
-                >
-                    <span className="block sm:inline text-white">
-                        {textAlert}
-                    </span>
-                    <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
-                        <strong>X</strong>
-                    </span>
-                </div>
+             <Alert/>
                 {renderView()}
             </form>
         </div>

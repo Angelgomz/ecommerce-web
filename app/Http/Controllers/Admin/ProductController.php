@@ -5,14 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Product;
 
 class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::all();
+        $products = Product::with('category')->get();
         return response()->json([
             'status' => 'success',
             'data' => $products,
@@ -23,14 +23,16 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request)
     {
         $data = $request->validated();
-        $data['image'] = $data['name'];
+        $routeImage = Storage::disk('public')->put('products', $data['image']);
+        $data['image'] = $routeImage;
         $product = Product::create($data);
         return response()->json([
             'status' => 'success',
             'data' => $product,
+            'routeImage' => $routeImage,
             'message' => 'Producto creado sastifactoriamente'
-        ]); 
-    } 
+        ]);
+    }
 
     public function update(UpdateProductRequest $request, Product $product)
     {

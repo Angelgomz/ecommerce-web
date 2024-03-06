@@ -1,17 +1,22 @@
 import React, { useContext, useState, useEffect } from "react";
+import AxiosInstance from "../../Components/AxiosInstance";
 import { Layout } from "../../Components/Layout";
 import { ShoppingCartContext } from "../../Context";
 import { Card } from "../../Components/Card";
 import { ProductDetail } from "../../Components/ProductDetail";
 import { CheckoutSideMenu } from "../../Components/CheckoutSideMenu";
-
 const Store = () => {
-    const [items] = useState(null);
     const context = useContext(ShoppingCartContext);
+    const [items,setItems] = useState(context.items);
     useEffect(() => {
-        fetch("https://fakestoreapi.com/products")
-            .then((response) => response.json())
-            .then((data) => context.setItems(data));
+       AxiosInstance.defaults.headers.common[
+            "Authorization"
+        ] = `Bearer ${context.plainTextToken}`;
+        AxiosInstance.get(
+            `api/admin/products`,
+        ).then((response) => {
+            context.setItems(response.data.data);
+        });
     }, []);
     const renderView = (items) => {
         items =

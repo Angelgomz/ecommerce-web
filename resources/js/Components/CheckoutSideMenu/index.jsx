@@ -49,8 +49,8 @@ const CheckoutSideMenu = () => {
           
             <OrderCard
               id={product.id}
-              title={product.title}
-              imageUrl={product.image}
+              title={product.name}
+              imageUrl={'/storage/'+product.image}
               price={product.price}
               handleDelete={handleDelete}
             />

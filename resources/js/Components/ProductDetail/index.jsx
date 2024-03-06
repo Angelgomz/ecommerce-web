@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { ShoppingCartContext } from "../../Context";
-import { XMarkIcon} from "@heroicons/react/24/solid";
+import { StarIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import "./index.css";
 import { QuantityInput } from "../QuantityInput";
 const ProductDetail = () => {
@@ -11,21 +11,23 @@ const ProductDetail = () => {
                 context.isProductDetailOpen ? "flex" : "hidden"
             } product-detail flex-col fixed bg-white right-0 border boder border-green rounded-lg p-2`}
         >
-            <div
-                className="flex justify-between items-center p-1"
-            >
-                <h2 className="font-medium text-lg text-nutri">Detail</h2>
+            <div className="flex justify-between items-center p-1">
+                <h2 className="font-medium text-lg text-nutri">Detalle</h2>
                 <div>
                     <XMarkIcon
                         className="w-10 cursor-pointer"
-                        onClick={() =>  context.setIsProductDetailOpen(!context.isProductDetailOpen)}
+                        onClick={() =>
+                            context.setIsProductDetailOpen(
+                                !context.isProductDetailOpen
+                            )
+                        }
                     />
                 </div>
             </div>
             <div className="flex justify-center items-center">
                 <img
                     className="w-4/5 h-4/5 rounded-lg"
-                    src={context.productToShow.image}
+                    src={"storage/" + context.productToShow.image}
                     alt={context.productToShow.title}
                 ></img>
             </div>
@@ -37,9 +39,17 @@ const ProductDetail = () => {
                 <span className="font-light text-sm">
                     {context.productToShow.description}
                 </span>
-                <QuantityInput product={context.productToShow.id}/>
+                <div className="flex mb-2 mt-2">
+                    {[...Array(5)].map((_, index) => (
+                        <StarIcon
+                            key={index}
+                            className="h-5 w-5 text-yellow-400"
+                        />
+                    ))}
+                </div>
+                <QuantityInput product={context.productToShow.id} />
                 <button className="text-white bg-nutri p-2 m-2 rounded-lg">
-                    agregar al carrito{" "}
+                    agregar al carrito
                 </button>
             </p>
         </div>

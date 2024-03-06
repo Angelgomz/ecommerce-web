@@ -4,9 +4,22 @@ class ClassState extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            loading:false,
             error: false,
             delete:false,
         };
+    }
+    componentWillUnmount()
+    {
+        console.log("componentWillUnMount");
+    }
+    componentWillMount()
+    {
+        console.log("componentWillMount");
+    }
+    componentDidMount()
+    {
+        console.log("componentDidMount");
     }
     render() {
         return (

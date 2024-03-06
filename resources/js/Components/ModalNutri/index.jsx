@@ -4,12 +4,9 @@ import { InputField } from "../InputField";
 import { SubmitButton } from "../SubmitButton";
 import AxiosInstance from "../AxiosInstance";
 import { SelectField } from "../SelectField";
-const ModalNutri = () => {
+const ModalNutri = ({product}) => {
+    console.log(product);
     const context = useContext(ShoppingCartContext);
-     console.log(context);
-    const [showAlert, setShowAlert] = useState(false);
-    const [textAlert, setTextAlert] = useState(false);
-    const [colorAlert, setColorAlert] = useState(false);
     const [categories, setCategories] = useState(null);
     const closeModal = () => {
         context.setIsOpenModal(false);
@@ -33,12 +30,10 @@ const ModalNutri = () => {
         AxiosInstance.defaults.headers.common[
             "Authorization"
         ] = `Bearer ${context.plainTextToken}`;
-        AxiosInstance.defaults.headers.common["Content-Type"] = "multipart/form-data";
+        AxiosInstance.defaults.headers.common["Content-Type"] =
+            "multipart/form-data";
         AxiosInstance.defaults.headers.common["processData"] = false;
         AxiosInstance.defaults.headers.common["cache"] = false;
-            //remove accept 
-          // and that two 'contentType': false,
-           // 'processData': false
         Object.entries(productState).forEach(([key, value]) => {
             formData.append(key, value);
         });
@@ -46,41 +41,10 @@ const ModalNutri = () => {
             ? AxiosInstance.post(baseUrl, formData, {})
                   .then((response) => {
                       if (response.status >= 200 && response.status < 300) {
-                        console.log(response);
-                          let data = response.data;
-                          /* context.setAccount(data.user);
-                              context.setPlainTextToken(
-                                  data.user.plain_text_token
-                              );
-                              context.setIsAdmin(
-                                  data.user?.roles?.name == "admin"
-                                      ? true
-                                      : false
-                              );
-                              context.setSignOut(false);
-                              localStorage.setItem(
-                                  "signOut",
-                                  JSON.stringify(false)
-                              );
-                              localStorage.setItem(
-                                  "isAdmin",
-                                  JSON.stringify(
-                                      data.user?.roles[0].name == "admin"
-                                          ? true
-                                          : false
-                                  )
-                              );
-                              localStorage.setItem(
-                                  "account",
-                                  JSON.stringify(data.user)
-                              );
-                              localStorage.setItem(
-                                  "plainTextToken",
-                                  JSON.stringify(data.user.plain_text_token)
-                              );
-                              navigate("/");
-                              return;
-                          } */
+                          context.setIsOpenModal(false);
+                          context.setTextAlert("Producto registrado.");
+                          context.setColorAlert("bg-green-700");
+                          context.setShowAlert(true);
                       }
                   })
                   .catch((error) => {
@@ -95,13 +59,8 @@ const ModalNutri = () => {
             : null;
     };
     const handleInputChange = (field, value) => {
-        console.log(field,value);
         const stateUpdater = setProductState;
-        if (field == "image") {
-            value = value.files[0];
-        } else {
-            value = value.value;
-        }
+        value = field == "image" ? value.files[0] : value.value;
         stateUpdater((prevState) => ({ ...prevState, [field]: value }));
     };
     const renderInputField = (label, field, value, pattern, placeholder) => (
@@ -127,18 +86,15 @@ const ModalNutri = () => {
                 </p>
             </div>
         ));
-        useEffect(() => {
-            const baseUrl = "/api/categories/";
-            AxiosInstance.defaults.headers.common[
-                "Authorization"
-            ] = `Bearer ${context.plainTextToke}`;
-             AxiosInstance.get(baseUrl)
-                      .then((response) => {
-                            setCategories(response.data);
-                      })
-                      .catch((error) => {
-                      })
-        },[]);
+    useEffect(() => {
+        const baseUrl = "/api/categories/";
+        AxiosInstance.defaults.headers.common[
+            "Authorization"
+        ] = `Bearer ${context.plainTextToke}`;
+        AxiosInstance.get(baseUrl).then((response) => {
+            setCategories(response.data);
+        });
+    }, []);
     return (
         <div>
             {context.modal && (
@@ -183,9 +139,7 @@ const ModalNutri = () => {
                                                                 e.target
                                                             )
                                                         }
-                                                        options={
-                                                            categories
-                                                        }
+                                                        options={categories}
                                                     />
                                                 </div>
                                                 {renderErrorMessages(
@@ -241,22 +195,19 @@ const ModalNutri = () => {
                                                         "stock"
                                                     )}
                                                 </div>
-                                                <div>
-                                                    <SubmitButton className="mt-3" />
+                                                <div className="mt-5">
+                                                    <SubmitButton className="mt-5" />
+                                                    <button
+                                                        onClick={closeModal}
+                                                        className="mt-5 w-full bg-indigo-700 text-white py-2 px-4 rounded"
+                                                    >
+                                                        Cerrar
+                                                    </button>
                                                 </div>
                                             </form>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                                <button
-                                    onClick={closeModal}
-                                    type="button"
-                                    className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm"
-                                >
-                                    Cerrar
-                                </button>
                             </div>
                         </div>
                     </div>

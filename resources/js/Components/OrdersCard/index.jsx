@@ -30,11 +30,11 @@ const OrdersCard = (props) => {
             <li key={product.id} className="flex justify-between items-center">
               <div className="flex items-center">
                 <img
-                  src={product.image}
-                  alt={product.title}
+                  src={'storage/'+product.image}
+                  alt={product.name}
                   className="w-8 h-8 mr-2"
                 />
-                <span>{product.title}</span>
+                <span>{product.name}</span>
               </div>
               <span className='text-nutri'>${product.price}</span>
             </li>

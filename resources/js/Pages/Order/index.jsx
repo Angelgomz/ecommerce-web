@@ -64,14 +64,14 @@ const Order = () => {
                                   <div>
                                       <img
                                           className="w-20 h-20"
-                                          src={product.image}
+                                          src={'/storage/'+product.image}
                                           alt={product.name}
                                       />
                                   </div>
                                   <div className="px-3 py-1 w-[100%] flex justify-between">
                                       <div>
                                           <div className="font-bolder text-sm mb-2">
-                                              {product.title}
+                                              {product.name}
                                           </div>
                                           <p className="text-gray-600 text-base">
                                               $ {product.price}
@@ -228,14 +228,14 @@ const Order = () => {
                                   <div>
                                       <img
                                           className="w-20 h-20"
-                                          src={product.image}
+                                          src={'/storage/'+product.image}
                                           alt={product.name}
                                       />
                                   </div>
                                   <div className="px-3 py-1 w-[100%] flex justify-between">
                                       <div>
                                           <div className="font-bolder text-sm mb-2">
-                                              {product.title}
+                                              {product.name}
                                           </div>
                                           <p className="font-md text-base text-nutri">
                                               $ {product.price * product.cant}

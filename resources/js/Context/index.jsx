@@ -50,8 +50,12 @@ export const ShoppingCartProvider = ({ children }) => {
     const [searchByTitle, setSearchByTitle] = useState(null);
     // info cart order checkout side menu open/close.
     const [isCheckoutSideMenu, setIsCheckoutSideMenuOpen] = useState(false);
-    //modal 
-    const [modal,setIsOpenModal] =  useState(false);
+    //modal
+    const [modal, setIsOpenModal] = useState(false);
+    //alerts
+    const [showAlert, setShowAlert] = useState(false);
+    const [textAlert, setTextAlert] = useState(false);
+    const [colorAlert, setColorAlert] = useState(false);
     const openCheckoutSideMenu = () => setIsCheckoutSideMenuOpen(true);
     const closeCheckoutSideMenu = () => setIsCheckoutSideMenuOpen(false);
     const filteredItemsByTitle = (items, searchByTitle) => {
@@ -105,6 +109,12 @@ export const ShoppingCartProvider = ({ children }) => {
                 setIsAdmin,
                 checkout,
                 setCheckout,
+                showAlert,
+                setShowAlert,
+                textAlert,
+                setTextAlert,
+                colorAlert,
+                setColorAlert,
             }}
         >
             {children}
