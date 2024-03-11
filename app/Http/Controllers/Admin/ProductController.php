@@ -7,19 +7,22 @@ use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Product;
-
+use App\Http\Resources\V1\ProductResource;
+use App\Http\Resources\V1\ProductCollection;
 class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::with('category')->get();
+        $products = Product::with('category','ratings')->get();
         return response()->json([
             'status' => 'success',
-            'data' => $products,
+            'data' => new ProductCollection($products),
             'message' => 'Products fetched successfully'
         ]);
     }
-
+    public function show(Product $product){
+        return new ProductResource($product);
+    }
     public function store(StoreProductRequest $request)
     {
         $data = $request->validated();

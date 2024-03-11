@@ -1,10 +1,35 @@
 import React, { useContext } from "react";
 import { ShoppingCartContext } from "../../Context";
 import { StarIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import AxiosInstance from "../../Components/AxiosInstance";
 import "./index.css";
 import { QuantityInput } from "../QuantityInput";
 const ProductDetail = () => {
     const context = useContext(ShoppingCartContext);
+    console.log(context.productToShow);
+    AxiosInstance.defaults.headers.common[
+        "Authorization"
+    ] = `Bearer ${context.plainTextToken}`;
+    const makeRating = (productId,rating) => {
+        let baseUrl = `api/rating`;
+        AxiosInstance.post(baseUrl,JSON.stringify({
+            productId: productId,
+            rating: rating,
+        }))
+        .then((response) => {
+            if (response.status >= 200 && response.status < 300) {
+                }
+        })
+        .catch((error) => {
+            if (error.response.data.errors) {
+                displayErrors(error.response.data.errors);
+            } else {
+                context.setTextAlert(error.response.data.msg);
+                context.setColorAlert("bg-red-500");
+                context.setShowAlert(true);
+            }
+        })
+    };
     return (
         <div
             className={`${
@@ -41,7 +66,7 @@ const ProductDetail = () => {
                 </span>
                 <div className="flex mb-2 mt-2">
                     {[...Array(5)].map((_, index) => (
-                        <StarIcon
+                        <StarIcon onClick={() => makeRating(context.productToShow.id,index + 1)}
                             key={index}
                             className="h-5 w-5 text-yellow-400"
                         />

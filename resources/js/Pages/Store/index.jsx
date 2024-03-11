@@ -8,6 +8,8 @@ import { CheckoutSideMenu } from "../../Components/CheckoutSideMenu";
 const Store = () => {
     const context = useContext(ShoppingCartContext);
     const [items,setItems] = useState(context.items);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
     useEffect(() => {
        AxiosInstance.defaults.headers.common[
             "Authorization"
@@ -15,19 +17,37 @@ const Store = () => {
         AxiosInstance.get(
             `api/admin/products`,
         ).then((response) => {
-            context.setItems(response.data.data);
+            context.setItems(response.data.data.data);
         });
     }, []);
+    const nextPage = () =>{
+
+    }
+    const prevPage = () =>{
+
+    }
     const renderView = (items) => {
         items =
             context.searchByTitle?.length > 0 ? context.filteredItems : context.items;
         return items?.length > 0 ? (
-            items?.map((item) => <Card key={item.id} data={item} />)
-        ) : (
+            <>
+            {items.map((item) => (
+                <Card key={item.id} data={item} />
+            ))
+            }
+            <div className="flex justify-center">
+            <button onClick={prevPage} disabled={currentPage === 1}>
+                Anterior
+            </button>
+            <button onClick={nextPage} disabled={currentPage === totalPages}>
+                Siguiente
+            </button>
+            </div>
+            </>
+            ) : (
             <p>No hay resultados disponibles...</p>
         );
     };
-
     return (
         <Layout>
             <div className="flex flex-col justify-center items-center">

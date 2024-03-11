@@ -2,6 +2,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CommuneController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\RatingController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\UserController;
@@ -28,6 +29,7 @@ Route::post('/auth/login', [LoginController::class, 'login'])->name('login');
 Route::post('register', [RegisterController::class, 'create'])->name('register');
 Route::apiResource('/communes', CommuneController::class)->only('index');
 Route::apiResource('/categories', CategoryController::class)->only('index');
+Route::apiResource('/rating', RatingController::class)->only('store');
 /* Protected routes */
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('/auth/logout', [LoginController::class, 'logout'])->name('logout');
